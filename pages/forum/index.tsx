@@ -16,19 +16,22 @@ type Props = {
 };
 
 const ForumPage: NextPage<Props> = (props: Props) => {
-
   return (
     <div className="w-screen h-screen overflow-scroll">
       <Tabs defaultValue="account" className="w-full">
         <TabsList className="w-full rounded-none">
           {forumsType.map((forumType) => (
-            <TabsTrigger value={forumType.name} className="w-full">
+            <TabsTrigger key={forumType.name} value={forumType.name} className="w-full">
               {forumType.name}
             </TabsTrigger>
           ))}
         </TabsList>
         {forumsType.map((forumType) => (
-          <TabsContent value={forumType.name} className="mt-0">
+          <TabsContent
+            key={forumType.name}
+            value={forumType.name}
+            className="mt-0"
+          >
             {props.forums.map((forum) => (
               <Card key={forum.boardName} className="rounded-none">
                 <CardContent
@@ -39,12 +42,16 @@ const ForumPage: NextPage<Props> = (props: Props) => {
                     <h3>{forum.boardClass}</h3>
                   </div>
                   <div>
-                    <h3 className={cn(
-                    forum.boardLevel === 1 ? "text-red-500": "",
-                    forum.boardLevel === 2 ? "text-blue-400": "",
-                    forum.boardLevel === 3 ? "text-white": "",
-                    forum.boardLevel === 4 ? "text-green-400": "",
-                      )}>{forum.boardRate}</h3>
+                    <h3
+                      className={cn(
+                        forum.boardLevel === 1 ? "text-red-500" : "",
+                        forum.boardLevel === 2 ? "text-blue-400" : "",
+                        forum.boardLevel === 3 ? "text-white" : "",
+                        forum.boardLevel === 4 ? "text-green-400" : ""
+                      )}
+                    >
+                      {forum.boardRate}
+                    </h3>
                   </div>
                 </CardContent>
               </Card>
