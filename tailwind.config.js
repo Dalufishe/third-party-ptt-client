@@ -21,6 +21,8 @@ module.exports = {
       colors: {
         primary: colors.slate[950],
         secondary: colors.slate[800],
+        text1: colors.white,
+        text2: colors.slate[400],
       },
       keyframes: {
         "accordion-down": {

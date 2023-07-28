@@ -1,6 +1,13 @@
 import React from "react";
 import { cn } from "../../../utils/cn";
-import { css } from "@emotion/css";
+import { AiFillAppstore, AiFillSetting } from "react-icons/ai";
+
+const tabs = [
+  <AiFillAppstore />,
+  <AiFillAppstore />,
+  <AiFillAppstore />,
+  <AiFillSetting />,
+];
 
 const Tabbar = () => {
   return (
@@ -13,10 +20,18 @@ const Tabbar = () => {
         "p-2"
       )}
     >
-      <li className="w-full">1</li>
-      <li className="w-full">2</li>
-      <li className="w-full">3</li>
-      <li className="w-full">4</li>
+      {tabs.map((tab, index) => (
+        <li
+          key={index}
+          className={cn(
+            "w-full",
+            "flex justify-center items-center",
+            "text-2xl text-text2"
+          )}
+        >
+          {tab}
+        </li>
+      ))}
     </ul>
   );
 };
