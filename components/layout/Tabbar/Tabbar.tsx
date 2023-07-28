@@ -13,7 +13,7 @@ const Tabbar = () => {
   return (
     <ul
       className={cn(
-        "absolute bottom-0",
+        "fixed bottom-0",
         "w-full h-[48px]",
         "bg-secondary",
         "flex items-center justify-between",
