@@ -59,7 +59,7 @@ const Page: NextPage<Props> = (props: Props) => {
 export const getStaticPaths: GetStaticPaths = () => {
   return {
     paths: [],
-    fallback: false,
+    fallback: true,
   };
 };
 
