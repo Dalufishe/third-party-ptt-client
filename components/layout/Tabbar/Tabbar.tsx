@@ -3,10 +3,10 @@ import { cn } from "../../../utils/cn";
 import { AiFillAppstore, AiFillSetting } from "react-icons/ai";
 
 const tabs = [
-  <AiFillAppstore />,
-  <AiFillAppstore />,
-  <AiFillAppstore />,
-  <AiFillSetting />,
+  { id: 1, icon: <AiFillAppstore /> },
+  { id: 2, icon: <AiFillAppstore /> },
+  { id: 3, icon: <AiFillAppstore /> },
+  { id: 4, icon: <AiFillSetting /> },
 ];
 
 const Tabbar = () => {
@@ -20,16 +20,16 @@ const Tabbar = () => {
         "p-2"
       )}
     >
-      {tabs.map((tab, index) => (
+      {tabs.map((tab) => (
         <li
-          key={index}
+          key={tab.id}
           className={cn(
             "w-full",
             "flex justify-center items-center",
             "text-2xl text-text2"
           )}
         >
-          {tab}
+          {tab.icon}
         </li>
       ))}
     </ul>
