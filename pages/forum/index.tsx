@@ -18,15 +18,8 @@ type Props = {
 
 const ForumPage: NextPage<Props> = (props: Props) => {
   return (
-    <div
-      className={cn(
-        "w-screen h-[calc(100vh-96px)] overflow-scroll",
-      )}
-    >
-      <Tabs
-        defaultValue={forumsType[0].name}
-        className={cn("w-full")}
-      >
+    <div className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}>
+      <Tabs defaultValue={forumsType[0].name} className={cn("w-full")}>
         <TabsList className="w-full rounded-none">
           {forumsType.map((forumType) => (
             <TabsTrigger
