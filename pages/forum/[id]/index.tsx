@@ -56,9 +56,11 @@ const Page: NextPage<Props> = (props: Props) => {
   );
 };
 
-export const getStaticPaths: GetStaticPaths = () => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const hotBoards = await PPT.getHotBoards();
+  const paths = hotBoards.map((board) => "/forum" + board.boardHref);
   return {
-    paths: [],
+    paths,
     fallback: true,
   };
 };
@@ -70,6 +72,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
     props: {
       forum,
     },
+    revalidate: 3,
   };
 };
 
