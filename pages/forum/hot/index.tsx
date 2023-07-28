@@ -1,5 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import PPT, { GroupBoard, HotBoard } from "../../../core/PPT";
+import PPT, { HotBoard } from "../../../core/PPT";
 import { cn } from "../../../utils/cn";
 import {
   Tabs,
@@ -9,6 +9,8 @@ import {
 } from "../../../components/@/components/ui/tabs";
 import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
+import useScroll from "../../../hooks/useScroll";
+import { useEffect, useRef, useState } from "react";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -20,10 +22,38 @@ type Props = {
 };
 
 const Page: NextPage<Props> = (props: Props) => {
+  const pageRef = useRef(null);
+  const [pageEl, setPageEl] = useState(pageRef.current);
+  const [isTabListHidden, setTabListHiddden] = useState(false);
+
+  useEffect(() => {
+    setPageEl(pageRef.current);
+  }, [pageRef.current]);
+
+  useScroll(
+    pageEl,
+    () => {
+      setTabListHiddden(false);
+    },
+    () => {
+      setTabListHiddden(true);
+    }
+  );
+
   return (
-    <div className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}>
+    <div
+      ref={pageRef}
+      className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}
+    >
       <Tabs defaultValue={forumsType[0].name} className={cn("w-full")}>
-        <TabsList className="w-full rounded-none">
+        <TabsList
+          className={cn(
+            "w-full rounded-none",
+            "sticky",
+            isTabListHidden ? "top-0" : "top-[-40px]",
+            "transition-all"
+          )}
+        >
           {forumsType.map((forumType) => (
             <TabsTrigger
               key={forumType.name}
