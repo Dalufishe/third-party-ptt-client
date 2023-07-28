@@ -18,7 +18,7 @@ type Props = {
   groups: GroupBoard[];
 };
 
-const ForumPage: NextPage<Props> = (props: Props) => {
+const Page: NextPage<Props> = (props: Props) => {
   return (
     <div className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}>
       <Tabs defaultValue={forumsType[1].name} className={cn("w-full")}>
@@ -41,26 +41,28 @@ const ForumPage: NextPage<Props> = (props: Props) => {
                 value={forumType.name}
                 className="mt-0"
               >
-                {props.groups.map((forum) => (
-                  <Card key={forum.boardName} className="rounded-none">
-                    <CardContent
-                      className={cn(
-                        "bg-primary",
-                        "flex flex-col justify-between",
-                        "p-2"
-                      )}
-                    >
-                      <div className="flex justify-between">
-                        <div className="flex">
-                          <h3>{forum.boardName}</h3>
+                {props.groups?.map((forum) => (
+                  <Link href={forum.boardHref}>
+                    <Card key={forum.boardName} className="rounded-none">
+                      <CardContent
+                        className={cn(
+                          "bg-primary",
+                          "flex flex-col justify-between",
+                          "p-2"
+                        )}
+                      >
+                        <div className="flex justify-between">
+                          <div className="flex">
+                            <h3>{forum.boardName}</h3>
+                          </div>
+                          <div></div>
                         </div>
-                        <div></div>
-                      </div>
-                      <div className="text-text2 text-sm">
-                        {forum.boardTitle}
-                      </div>
-                    </CardContent>
-                  </Card>
+                        <div className="text-text2 text-sm">
+                          {forum.boardTitle}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </Link>
                 ))}
               </TabsContent>
             );
@@ -73,11 +75,12 @@ const ForumPage: NextPage<Props> = (props: Props) => {
 export const getStaticPaths: GetStaticPaths = async () => {
   return {
     paths: ["/forum/group/1"],
-    fallback: false,
+    fallback: true,
   };
 };
-export const getStaticProps: GetStaticProps = async () => {
-  const groups = await PPT.getGroupBoards();
+export const getStaticProps: GetStaticProps = async (context) => {
+  const groupId = context.params?.id as string | undefined;
+  const groups = await PPT.getGroupBoards(groupId);
   return {
     props: {
       groups,
@@ -86,4 +89,4 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
-export default ForumPage;
+export default Page;

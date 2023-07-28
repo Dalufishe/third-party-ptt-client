@@ -2,7 +2,7 @@ import { NextPage } from "next";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
-const ForumPage: NextPage = () => {
+const Page: NextPage = () => {
   const router = useRouter();
 
   useEffect(() => {
@@ -12,4 +12,4 @@ const ForumPage: NextPage = () => {
   return <></>;
 };
 
-export default ForumPage;
+export default Page;

@@ -1,0 +1,12 @@
+{
+  "favorites.resources": [
+    {
+      "filePath": "core\\PPT.ts",
+      "group": "Default"
+    },
+    {
+      "filePath": "tailwind.config.js",
+      "group": "Default"
+    }
+  ]
+}

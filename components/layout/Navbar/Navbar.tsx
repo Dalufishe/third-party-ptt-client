@@ -13,10 +13,12 @@ const Navbar = () => {
         "p-3"
       )}
     >
-      <h1 className={cn("text-[#ff6] text-xl font-bold")}>批踢踢</h1>
-      <Link href="/forum" className={cn("text-2xl")}>
-        <AiOutlineSearch />
+      <Link href="/">
+        <h1 className={cn("text-[#ff6] text-xl font-bold")}>批踢踢</h1>
       </Link>
+      <div className={cn("text-2xl")}>
+        <AiOutlineSearch />
+      </div>
     </div>
   );
 };
