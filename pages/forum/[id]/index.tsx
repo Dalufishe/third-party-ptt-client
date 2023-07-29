@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import PTT, { BoardItem } from "../../../core/PTT";
+import PTT, { Board, BoardItem } from "../../../core/PTT";
 import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
 import { cn } from "../../../utils/cn";
@@ -16,9 +16,7 @@ import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 type Props = {
-  forum: BoardItem[];
-  need18up: boolean;
-  currentId: string;
+  board: Board;
 };
 
 const Page: NextPage<Props> = (props: Props) => {
@@ -26,12 +24,12 @@ const Page: NextPage<Props> = (props: Props) => {
 
   // forums
 
-  const [forum, setForum] = useState(props.forum);
-  const [currentId, setCurrentId] = useState(props.currentId);
+  const [forum, setForum] = useState(props.board.data);
+  const [currentId, setCurrentId] = useState(props.board.currentId);
 
   const fetchNextData = useCallback(async () => {
     const res = await fetch(
-      `/api/getBoard/?forum=${router.query.id}&id=${Number(currentId) - 1}`
+      `/api/getBoard?name=${router.query.id}&id=${Number(currentId) - 1}`
     );
     const json = await res.json();
     setForum([...forum, ...json?.data]);
@@ -48,7 +46,7 @@ const Page: NextPage<Props> = (props: Props) => {
   const [need18, setNeed18] = useState(false);
 
   useLayoutEffect(() => {
-    if (props.need18up) {
+    if (props.board.need18up) {
       setNeed18(true);
     }
   }, []);
@@ -150,15 +148,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const forumId = context.params?.id as string;
   const response = await PTT.getBoard(forumId);
-  const forum = response.data;
+  const data = response.data;
   const need18up = response.need18up;
   const currentId = response.currentId;
 
   return {
     props: {
-      forum,
-      need18up,
-      currentId,
+      board: {
+        data,
+        need18up,
+        currentId,
+      },
     },
     revalidate: 3,
   };

@@ -1,6 +1,7 @@
 import * as cheerio from "cheerio";
 import serializeCookie from "../utils/serializeCookie";
 import { headers } from "next/dist/client/components/headers";
+import { type } from "os";
 
 export type HotBoard = {
   boardClass: string;
@@ -27,7 +28,10 @@ export type BoardItem = {
   level: number;
 };
 
+export type Board = { need18up: boolean; data: BoardItem[]; currentId: string };
+
 export type Post = {
+  need18up: boolean;
   title: string;
   author: string;
   time: number;
@@ -145,9 +149,9 @@ class PTT {
     return groupBoards;
   }
   static async getBoard(
-    name: string,
+    name: string = "Gossiping",
     id: string = ""
-  ): Promise<{ need18up: boolean; data: BoardItem[]; currentId: string }> {
+  ): Promise<Board> {
     const url = `${this.boardURL}/${name}/index${id}.html`;
     let need18up = false;
     let currentId = "";
@@ -235,35 +239,17 @@ class PTT {
       data: board,
     };
   }
-  static async getPost(
-    page: string
-  ): Promise<{ need18up: boolean; data: Post }> {
+  static async getPost(page: string): Promise<Post> {
     const url = `${this.boardURL}/${page}.html`;
-    let need18up = false;
 
     // 請求第一次
     let data = await fetch(url);
     let html = await data.text();
     let $ = cheerio.load(html);
 
-    // 若該版需滿 18
-    if ($(".over18-notice").text()) {
-      need18up = true;
-      // 請求第二次
-      const cookies = {
-        over18: "1",
-      };
-      data = await fetch(url, {
-        headers: {
-          Cookie: serializeCookie(cookies),
-        },
-      });
-      html = await data.text();
-      $ = cheerio.load(html);
-    }
-
     // analysize
     const post: Post = {
+      need18up: false,
       title: "",
       author: "",
       time: 0,
@@ -281,6 +267,22 @@ class PTT {
         },
       ],
     };
+
+    // 若該版需滿 18
+    if ($(".over18-notice").text()) {
+      post.need18up = true;
+      // 請求第二次
+      const cookies = {
+        over18: "1",
+      };
+      data = await fetch(url, {
+        headers: {
+          Cookie: serializeCookie(cookies),
+        },
+      });
+      html = await data.text();
+      $ = cheerio.load(html);
+    }
 
     //* author, title, time
     $(".article-metaline").each(function (index) {
@@ -343,10 +345,7 @@ class PTT {
     });
     post.comments = post.comments.slice(1);
 
-    return {
-      need18up: need18up,
-      data: post,
-    };
+    return post;
   }
 }
 

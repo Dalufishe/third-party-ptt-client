@@ -7,6 +7,10 @@
     {
       "filePath": "tailwind.config.js",
       "group": "Default"
+    },
+    {
+      "filePath": "pages\\api",
+      "group": "Default"
     }
   ]
 }

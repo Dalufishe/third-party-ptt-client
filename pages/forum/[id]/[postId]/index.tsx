@@ -17,7 +17,6 @@ import Need18Up from "../../../../components/layout/Need18Up/Need18Up";
 
 type Props = {
   post: Post;
-  need18up: boolean;
 };
 
 const Page: NextPageWithLayout<Props> = (props: Props) => {
@@ -26,7 +25,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   const [need18, setNeed18] = useState(false);
 
   useLayoutEffect(() => {
-    if (props.need18up) {
+    if (props.post.need18up) {
       setNeed18(true);
     }
   }, []);
@@ -150,12 +149,10 @@ Page.getLayout = function getLayout(page) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const page = (ctx.query?.id + "/" + ctx.query?.postId) as string;
-  const response = await PTT.getPost(page);
-  const post = response.data;
-  const need18up = response.need18up;
+  const post = await PTT.getPost(page);
 
   return {
-    props: { post, need18up },
+    props: { post },
   };
 };
 
