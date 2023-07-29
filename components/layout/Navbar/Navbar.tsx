@@ -8,7 +8,7 @@ const Navbar = () => {
     <div
       className={cn(
         "h-[48px]",
-        "bg-[#0c0a66]",
+        "bg-brand",
         "flex items-center justify-between",
         "p-3"
       )}

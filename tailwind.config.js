@@ -19,10 +19,12 @@ module.exports = {
     },
     extend: {
       colors: {
+        brand: "#0c0a66",
         primary: colors.slate[950],
         secondary: colors.slate[800],
         text1: colors.white,
         text2: colors.slate[400],
+        text3: colors.slate[300],
       },
       keyframes: {
         "accordion-down": {

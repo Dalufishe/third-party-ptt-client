@@ -4,14 +4,16 @@ import Tabbar from "./Tabbar/Tabbar";
 
 type Props = {
   children: ReactNode;
+  noNavbar?: boolean;
+  noTabbar?: boolean;
 };
 
 const DefaultLayout = (props: Props) => {
   return (
     <div>
-      <Navbar />
+      {props.noNavbar || <Navbar />}
       {props.children}
-      <Tabbar />
+      {props.noTabbar || <Tabbar />}
     </div>
   );
 };

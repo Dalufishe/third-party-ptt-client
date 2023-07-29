@@ -32,14 +32,13 @@ export type Post = {
   time: number;
   board: string;
   article: string;
-  from: string;
   fromIp: string;
+  fromCountry: string;
   edited: string;
   comments: {
-    reaction: number;
+    tag: string;
     user: string;
     content: string;
-    fromIp: string;
     time: string;
   }[];
 };
@@ -235,20 +234,20 @@ class PTT {
       time: 0,
       board: "",
       article: "",
-      from: "",
       fromIp: "",
+      fromCountry: "",
       edited: "",
       comments: [
         {
-          reaction: 0,
+          tag: "",
           user: "",
           content: "",
-          fromIp: "",
           time: "",
         },
       ],
     };
 
+    //* author, title, time
     $(".article-metaline").each(function (index) {
       // tool func
       const el = this;
@@ -256,10 +255,6 @@ class PTT {
         return $(el).find(".article-meta-value").text();
       }
 
-      //* board
-      post.board = $(".article-metaline-right>.article-meta-value").text();
-
-      //* author, title, time
       switch (index) {
         case 0:
           post.author = getText();
@@ -270,23 +265,49 @@ class PTT {
         case 2:
           post.time = new Date(getText()).getTime();
       }
-
-      //* article
-      let article = "";
-      article = $("#main-content").text();
-      article = article.split("--")[0];
-      article = article.split("\n").slice(2).join("\n");
-      post.article = article;
-
-      //* from, fromIp, edited
-      $(".f2").each(function (index) {
-        switch (index) {
-          case 0:
-            break;
-        }
-      });
     });
 
+    //* board
+    post.board = $(".article-metaline-right>.article-meta-value").text();
+    //* article
+    let article = "";
+    article = $("#main-content").text();
+    article = article
+      .split("--")
+      .slice(0, article.split("--").length - 1)
+      .join();
+    article = article.split("\n").slice(1).join("\n");
+    post.article = article;
+
+    //* from, fromIp, edited
+    $(".f2").each(function (index) {
+      switch (index) {
+        case 0:
+          // ※ 發信站: 批踢踢實業坊(ptt.cc), 來自: 223.136.150.126 (臺灣)
+          const data = $(this).text();
+          post.fromIp = data.match(/\d+\.\d+\.\d+\.\d+/gu)?.toString() || "";
+          let fc = data.match(/\([\u4E00-\u9FFF]+\)/gu)?.toString();
+          fc = fc?.slice(1, fc.length - 1);
+          post.fromCountry = fc || "";
+          break;
+      }
+    });
+
+    //* comments
+    $(".push").each(function (index) {
+      const tag = $(this).find(".push-tag").text();
+      const user = $(this).find(".push-userid").text();
+      const content = $(this).find(".push-content").text().slice(2);
+      const time = $(this).find(".push-ipdatetime").text();
+      post.comments.push({
+        tag,
+        user,
+        content,
+        time,
+      });
+    });
+    post.comments = post.comments.slice(1);
+  
     return post;
   }
 }
