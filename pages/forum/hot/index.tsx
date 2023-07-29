@@ -13,6 +13,8 @@ import useScroll from "../../../hooks/useScroll";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import useScrollMemo from "../../../hooks/useScrollMemo";
+import { wrapper } from "../../../redux/store";
+import { getHotBoards } from "../../../redux/actions/getHotBoards.act";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -126,14 +128,20 @@ const Page: NextPage<Props> = (props: Props) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  const forums = await PTT.getHotBoards();
-  return {
-    props: {
-      forums,
-      revalidate: 3,
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
+  (store) => async () => {
+    let forums = store.getState().setHotBoards;
+    if (forums.length === 0) {
+      await store.dispatch(getHotBoards);
+      forums = store.getState().setHotBoards;
+    }
+    return {
+      props: {
+        forums,
+        revalidate: 3,
+      },
+    };
+  }
+);
 
 export default Page;
