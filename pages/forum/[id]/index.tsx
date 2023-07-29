@@ -41,7 +41,15 @@ const Page: NextPage<Props> = (props: Props) => {
         className={cn("h-[48px]", "rounded-none")}
       />
       {props.forum?.map((forumItem) => (
-        <Link key={forumItem.title} href={forumItem.href}>
+        <Link
+          key={forumItem.title}
+          href={(function () {
+            if (typeof window !== "undefined") {
+              return forumItem.href;
+            }
+            return "";
+          })()}
+        >
           <Card className="rounded-none">
             <CardContent
               className={cn(

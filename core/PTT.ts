@@ -26,6 +26,24 @@ export type BoardItem = {
   level: number;
 };
 
+export type Post = {
+  title: string;
+  author: string;
+  time: number;
+  board: string;
+  article: string;
+  from: string;
+  fromIp: string;
+  edited: string;
+  comments: {
+    reaction: number;
+    user: string;
+    content: string;
+    fromIp: string;
+    time: string;
+  }[];
+};
+
 class PTT {
   public static hotBoardsURL = "https://www.ptt.cc/bbs/hotboards.html";
   public static groupBoardsURL = "https://www.ptt.cc/cls";
@@ -171,10 +189,9 @@ class PTT {
       board[index].title = $(this).text();
     });
     $(".title>a").each(function (index) {
-      board[index].href = $(this)
-        .attr("href")
-        ?.match(/\/.+.html$/gu)
-        ?.toString() as string;
+      const arr = $(this).attr("href")?.split("/");
+      const data = arr?.[arr?.length - 2] + "/" + arr?.[arr?.length - 1];
+      board[index].href = data?.match(/.+(?=\.html)/gu)?.toString() as string;
     });
     $(".author").each(function (index) {
       board[index].author = $(this).text();
@@ -205,6 +222,72 @@ class PTT {
       need18up,
       data: board,
     };
+  }
+  static async getPost(page: string): Promise<Post> {
+    const data = await fetch(`${this.boardURL}/${page}.html`);
+    const html = await data.text();
+
+    // analysize
+    const $ = cheerio.load(html);
+    const post: Post = {
+      title: "",
+      author: "",
+      time: 0,
+      board: "",
+      article: "",
+      from: "",
+      fromIp: "",
+      edited: "",
+      comments: [
+        {
+          reaction: 0,
+          user: "",
+          content: "",
+          fromIp: "",
+          time: "",
+        },
+      ],
+    };
+
+    $(".article-metaline").each(function (index) {
+      // tool func
+      const el = this;
+      function getText() {
+        return $(el).find(".article-meta-value").text();
+      }
+
+      //* board
+      post.board = $(".article-metaline-right>.article-meta-value").text();
+
+      //* author, title, time
+      switch (index) {
+        case 0:
+          post.author = getText();
+          break;
+        case 1:
+          post.title = getText();
+          break;
+        case 2:
+          post.time = new Date(getText()).getTime();
+      }
+
+      //* article
+      let article = "";
+      article = $("#main-content").text();
+      article = article.split("--")[0];
+      article = article.split("\n").slice(2).join("\n");
+      post.article = article;
+
+      //* from, fromIp, edited
+      $(".f2").each(function (index) {
+        switch (index) {
+          case 0:
+            break;
+        }
+      });
+    });
+
+    return post;
   }
 }
 
