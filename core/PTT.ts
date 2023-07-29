@@ -65,6 +65,7 @@ class PTT {
     const hotBoards: HotBoard[] = [];
 
     $(".b-ent").each(function () {
+  (idGenerator());
       hotBoards.push({
         id: idGenerator(),
         boardClass: "",
