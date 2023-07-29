@@ -1,5 +1,5 @@
 import type { GetStaticProps, NextPage } from "next";
-import PPT, { HotBoard } from "../../../core/PPT";
+import PTT, { HotBoard } from "../../../core/PTT";
 import { cn } from "../../../utils/cn";
 import {
   Tabs,
@@ -118,7 +118,7 @@ const Page: NextPage<Props> = (props: Props) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  const forums = await PPT.getHotBoards();
+  const forums = await PTT.getHotBoards();
   return {
     props: {
       forums,

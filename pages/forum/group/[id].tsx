@@ -1,5 +1,5 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import PPT, { GroupBoard, HotBoard } from "../../../core/PPT";
+import PTT, { GroupBoard, HotBoard } from "../../../core/PTT";
 import { cn } from "../../../utils/cn";
 import {
   Tabs,
@@ -80,7 +80,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 export const getStaticProps: GetStaticProps = async (context) => {
   const groupId = context.params?.id as string | undefined;
-  const groups = await PPT.getGroupBoards(groupId);
+  const groups = await PTT.getGroupBoards(groupId);
   return {
     props: {
       groups,

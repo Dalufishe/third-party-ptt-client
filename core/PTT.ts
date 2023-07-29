@@ -1,5 +1,5 @@
 import * as cheerio from "cheerio";
-import { type } from "os";
+import serializeCookie from "../utils/serializeCookie";
 
 export type HotBoard = {
   boardClass: string;
@@ -26,7 +26,7 @@ export type BoardItem = {
   level: number;
 };
 
-class PPT {
+class PTT {
   public static hotBoardsURL = "https://www.ptt.cc/bbs/hotboards.html";
   public static groupBoardsURL = "https://www.ptt.cc/cls";
   public static boardURL = "https://www.ptt.cc/bbs";
@@ -126,13 +126,36 @@ class PPT {
 
     return groupBoards;
   }
-  static async getBoard(name: string): Promise<BoardItem[]> {
-    const data = await fetch(this.boardURL + "/" + name + "/" + "index.html");
-    const html = await data.text();
-    // analysize
-    const $ = cheerio.load(html);
+  static async getBoard(
+    name: string
+  ): Promise<{ need18up: boolean; data: BoardItem[] }> {
+    const url = this.boardURL + "/" + name + "/index.html";
+    let need18up = false;
+
+    // 請求第一次
+    let data = await fetch(url);
+    let html = await data.text();
+    let $ = cheerio.load(html);
+
+    // 若該版需滿 18
+    if ($(".over18-notice").text()) {
+      need18up = true;
+      // 請求第二次
+      const cookies = {
+        over18: "1",
+      };
+      data = await fetch(url, {
+        headers: {
+          Cookie: serializeCookie(cookies),
+        },
+      });
+      html = await data.text();
+      $ = cheerio.load(html);
+    }
+
     const board: BoardItem[] = [];
 
+    // analysize
     $(".r-ent").each(function () {
       board.push({
         title: "",
@@ -178,8 +201,11 @@ class PPT {
       }
     });
 
-    return board;
+    return {
+      need18up,
+      data: board,
+    };
   }
 }
 
-export default PPT;
+export default PTT;
