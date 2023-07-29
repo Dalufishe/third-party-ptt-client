@@ -75,7 +75,7 @@ const Page: NextPage<Props> = (props: Props) => {
       />
       <InfiniteScroll
         scrollableTarget="react-infinite-scroll-component"
-        dataLength={forum.length}
+        dataLength={forum?.length}
         next={fetchNextData}
         hasMore={true}
         loader={<div></div>}
