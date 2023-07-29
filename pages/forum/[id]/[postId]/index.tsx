@@ -72,7 +72,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
               </CardDescription>
               <CardDescription className={cn("text-text2 ", "flex gap-2")}>
                 <span>{new Date(props.post.time).toLocaleString()}</span>
-                <span>{props.post.edited ? "(已編輯)" : ""})</span>
+                <span>{props.post.edited ? "(已編輯)" : ""}</span>
               </CardDescription>
             </div>
           </CardHeader>
