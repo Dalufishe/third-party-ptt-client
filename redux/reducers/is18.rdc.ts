@@ -1,4 +1,4 @@
-import { Action } from "../types/action";
+import { Action } from "../types/Action"
 
 const is18 = (prevSate = false, action: Action) => {
   let newState = prevSate;

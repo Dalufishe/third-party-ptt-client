@@ -1,4 +1,4 @@
-import { ActionCreator } from "../types/action";
+import { ActionCreator } from "../types/Action";
 
 const setIs18: ActionCreator = () => {
   return {
