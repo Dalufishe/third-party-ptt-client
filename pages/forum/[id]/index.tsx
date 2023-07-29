@@ -39,7 +39,7 @@ const Page: NextPage<Props> = (props: Props) => {
   }, [currentId]);
 
   useEffect(() => {
-    if (forum.length < 20) {
+    if (forum?.length < 20) {
       fetchNextData();
     }
   }, []);
