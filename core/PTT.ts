@@ -182,7 +182,7 @@ class PTT {
     $(".date").each(function (index) {
       board[index].date = $(this).text();
     });
-    $(".nrec>span").each(function (index) {
+    $(".nrec").each(function (index) {
       // rate
       if ($(this).text() === "爆") {
         board[index].rate = -1;
@@ -190,11 +190,11 @@ class PTT {
         board[index].rate = Number($(this).text());
       }
       // level
-      if ($(this).hasClass("f1")) {
+      if ($(this).find(".f1").text()) {
         board[index].level = 1;
-      } else if ($(this).hasClass("f2")) {
+      } else if ($(this).find(".f2").text()) {
         board[index].level = 2;
-      } else if ($(this).hasClass("f3")) {
+      } else if ($(this).find(".f3").text()) {
         board[index].level = 3;
       } else {
         board[index].level = 4;

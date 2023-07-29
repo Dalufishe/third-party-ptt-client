@@ -12,7 +12,7 @@ const Page = () => {
       )}
     >
       <div className="font-bold text-2xl">404</div>
-      <h1 className="text-xl text-text2">找不到該應面</h1>
+      <h1 className="text-xl text-text2">找不到該頁面</h1>
       <Block value={2} />
       <Link href="/">
         <Button variant="secondary" size="sm">

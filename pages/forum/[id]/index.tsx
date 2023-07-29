@@ -47,7 +47,7 @@ const Page: NextPage<Props> = (props: Props) => {
               className={cn(
                 "bg-primary",
                 "flex flex-col justify-between",
-                "p-2 pl-0"
+                "p-2 pl-0 pr-6"
               )}
             >
               <div className="flex items-center">
@@ -55,20 +55,25 @@ const Page: NextPage<Props> = (props: Props) => {
                   <div>
                     <h3
                       className={cn(
-                        forumItem.level === 1 ? "text-cyan-400" : "",
-                        forumItem.level === 2 ? "text-blue-400" : "",
-                        forumItem.level === 3 ? "text-red-400" : "",
+                        forumItem.level === 1 ? "text-red-400" : "",
+                        forumItem.level === 2 ? "text-green-400" : "",
+                        forumItem.level === 3 ? "text-yellow-400" : "",
                         forumItem.level === 4 ? "text-text1" : "",
                         ""
                       )}
                     >
-                      {forumItem.rate === -1 ? "爆" : forumItem.rate}
+                      {forumItem.rate === -1 ? "爆" : forumItem.rate || ""}
                     </h3>
                   </div>
                 </div>
-                <div className="flex flex-col">
+                <div className="flex flex-col flex-1">
                   <h3>{forumItem.title}</h3>
-                  <div className="text-text2 text-sm">{forumItem.author}</div>
+                  <div
+                    className={cn("text-text2 text-sm", "flex justify-between")}
+                  >
+                    <p>{forumItem.author}</p>
+                    <p>{forumItem.date}</p>
+                  </div>
                 </div>
               </div>
             </CardContent>
