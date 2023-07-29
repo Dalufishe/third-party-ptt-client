@@ -45,9 +45,9 @@ export type Post = {
 };
 
 class PTT {
-  public static hotBoardsURL = "https://www.ptt.cc/bbs/hotboards.html";
-  public static groupBoardsURL = "https://www.ptt.cc/cls";
-  public static boardURL = "https://www.ptt.cc/bbs";
+  static hotBoardsURL = "https://www.ptt.cc/bbs/hotboards.html";
+  static groupBoardsURL = "https://www.ptt.cc/cls";
+  static boardURL = "https://www.ptt.cc/bbs";
 
   static async getHotBoards(): Promise<HotBoard[]> {
     const data = await fetch(this.hotBoardsURL);
@@ -145,14 +145,17 @@ class PTT {
     return groupBoards;
   }
   static async getBoard(
-    name: string
-  ): Promise<{ need18up: boolean; data: BoardItem[] }> {
-    const url = this.boardURL + "/" + name + "/index.html";
+    name: string,
+    id: string = ""
+  ): Promise<{ need18up: boolean; data: BoardItem[]; currentId: string }> {
+    const url = `${this.boardURL}/${name}/index${id}.html`;
     let need18up = false;
+    let currentId = "";
 
     // 請求第一次
-    let data = await fetch(url);
+    let data = await fetch(url, {});
     let html = await data.text();
+
     let $ = cheerio.load(html);
 
     // 若該版需滿 18
@@ -170,6 +173,15 @@ class PTT {
       html = await data.text();
       $ = cheerio.load(html);
     }
+
+    // get id
+    $(".btn-group-paging>.btn").each(function (index) {
+      if (index === 1) {
+        const split = $(this).attr("href")?.split("/") || [];
+
+        currentId = split[split?.length - 1].match(/\d+/gu)?.toString() || "";
+      }
+    });
 
     const board: BoardItem[] = [];
 
@@ -217,8 +229,8 @@ class PTT {
         board[index].level = 4;
       }
     });
-
     return {
+      currentId,
       need18up,
       data: board,
     };

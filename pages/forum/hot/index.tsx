@@ -44,8 +44,8 @@ const Page: NextPage<Props> = (props: Props) => {
     }
   );
 
-  const scrollTop = useScrollMemo(pageEl as unknown as Element);
-
+  const scrollTop = useScrollMemo(pageEl);
+  
   return (
     <div
       ref={pageRef}
