@@ -319,12 +319,14 @@ class PTT {
     article = article
       .split("--")
       .slice(0, article.split("--").length - 1)
-      .join();
+      .join("--");
     article = article.split("\n").slice(1).join("\n");
     post.article = article;
 
     //* from, fromIp, edited
-    $(".f2").each(function (index) {
+    const split = $("#main-content").html()?.split("--");
+    const _$ = cheerio.load(split?.[split?.length - 1] as string);
+    _$(".f2").each(function (index) {
       const data = $(this).text();
       switch (index) {
         case 0:
