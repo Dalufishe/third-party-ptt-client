@@ -12,6 +12,7 @@ import Link from "next/link";
 import useScroll from "../../../hooks/useScroll";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
+import useScrollMemo from "../../../hooks/useScrollMemo";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -42,6 +43,8 @@ const Page: NextPage<Props> = (props: Props) => {
       setTabListHiddden(true);
     }
   );
+
+  const scrollTop = useScrollMemo(pageEl as unknown as Element);
 
   return (
     <div

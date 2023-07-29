@@ -1,5 +1,6 @@
 import * as cheerio from "cheerio";
 import serializeCookie from "../utils/serializeCookie";
+import { headers } from "next/dist/client/components/headers";
 
 export type HotBoard = {
   boardClass: string;
@@ -222,12 +223,34 @@ class PTT {
       data: board,
     };
   }
-  static async getPost(page: string): Promise<Post> {
-    const data = await fetch(`${this.boardURL}/${page}.html`);
-    const html = await data.text();
+  static async getPost(
+    page: string
+  ): Promise<{ need18up: boolean; data: Post }> {
+    const url = `${this.boardURL}/${page}.html`;
+    let need18up = false;
+
+    // 請求第一次
+    let data = await fetch(url);
+    let html = await data.text();
+    let $ = cheerio.load(html);
+
+    // 若該版需滿 18
+    if ($(".over18-notice").text()) {
+      need18up = true;
+      // 請求第二次
+      const cookies = {
+        over18: "1",
+      };
+      data = await fetch(url, {
+        headers: {
+          Cookie: serializeCookie(cookies),
+        },
+      });
+      html = await data.text();
+      $ = cheerio.load(html);
+    }
 
     // analysize
-    const $ = cheerio.load(html);
     const post: Post = {
       title: "",
       author: "",
@@ -307,8 +330,11 @@ class PTT {
       });
     });
     post.comments = post.comments.slice(1);
-  
-    return post;
+
+    return {
+      need18up: need18up,
+      data: post,
+    };
   }
 }
 

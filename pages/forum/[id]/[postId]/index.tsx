@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../../../../components/@/components/ui/card";
@@ -13,16 +12,35 @@ import { NextPageWithLayout } from "../../../../components/layout/NextPageWithLa
 import DefaultLayout from "../../../../components/layout/DefaultLayout";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useRouter } from "next/router";
-import { Alert } from "../../../../components/@/components/ui/alert";
+import { useCallback, useLayoutEffect, useState } from "react";
+import Need18Up from "../../../../components/layout/Need18Up/Need18Up";
 
 type Props = {
   post: Post;
+  need18up: boolean;
 };
 
 const Page: NextPageWithLayout<Props> = (props: Props) => {
   const router = useRouter();
-  console.log(props.post.comments);
-  return (
+
+  const [need18, setNeed18] = useState(false);
+
+  useLayoutEffect(() => {
+    if (props.need18up) {
+      setNeed18(true);
+    }
+  }, []);
+
+  const handleIs18 = useCallback(() => {
+    setNeed18(false);
+  }, []);
+  const handleIsNot18 = useCallback(() => {
+    router.push("/");
+  }, []);
+
+  return need18 ? (
+    <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />
+  ) : (
     <>
       {/* replaced Navbar */}
       <div
@@ -41,7 +59,14 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           />
         </div>
         <div>
-          <h2 className={cn("text-sm text-text3")}>{props.post.title}</h2>
+          <h2
+            className={cn(
+              "text-sm text-text3 whitespace-nowrap text-ellipsis overflow-hidden",
+              "w-52"
+            )}
+          >
+            {props.post.title}
+          </h2>
         </div>
         <div></div>
       </div>
@@ -125,9 +150,12 @@ Page.getLayout = function getLayout(page) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const page = (ctx.query?.id + "/" + ctx.query?.postId) as string;
-  const post = await PTT.getPost(page);
+  const response = await PTT.getPost(page);
+  const post = response.data;
+  const need18up = response.need18up;
+
   return {
-    props: { post },
+    props: { post, need18up },
   };
 };
 
