@@ -5,7 +5,7 @@ import Link from "next/link";
 import { cn } from "../../../utils/cn";
 import { Input } from "../../../components/@/components/ui/input";
 import Need18Up from "../../../components/layout/Need18Up/Need18Up";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useLayoutEffect, useState } from "react";
 import { useRouter } from "next/router";
 
 type Props = {
@@ -16,22 +16,22 @@ type Props = {
 const Page: NextPage<Props> = (props: Props) => {
   const router = useRouter();
 
-  const [is18, setIs18] = useState(false);
+  const [need18, setNeed18] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (props.need18up) {
-      setIs18(false);
+      setNeed18(true);
     }
   }, []);
 
   const handleIs18 = useCallback(() => {
-    setIs18(true);
+    setNeed18(false);
   }, []);
   const handleIsNot18 = useCallback(() => {
     router.push("/");
   }, []);
 
-  return !is18 ? (
+  return need18 ? (
     <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />
   ) : (
     <div className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}>
