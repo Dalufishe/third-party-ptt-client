@@ -3,8 +3,9 @@ import { Analytics } from "@vercel/analytics/react";
 import DefaultLayout from "../components/layout/DefaultLayout";
 import { NextPageWithLayout } from "../components/layout/NextPageWithLayout";
 import { AppProps } from "next/app";
-import { store, wrapper } from "../redux/store";
+import { persistor, store, wrapper } from "../redux/store";
 import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -17,8 +18,10 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return getLayout(
     <div className="dark">
       <Provider store={store}>
-        <Component {...pageProps} />
-        <Analytics />
+        <PersistGate persistor={persistor}>
+          <Component {...pageProps} />
+          <Analytics />
+        </PersistGate>
       </Provider>
     </div>
   );

@@ -14,6 +14,7 @@ import {
 } from "react";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
+import use18 from "../../../hooks/use18";
 
 type Props = {
   board: Board;
@@ -43,21 +44,8 @@ const Page: NextPage<Props> = (props: Props) => {
   }, []);
 
   // 18
-  const [need18, setNeed18] = useState(false);
 
-  useLayoutEffect(() => {
-    if (props.board.need18up) {
-      setNeed18(true);
-    }
-  }, []);
-
-  const handleIs18 = useCallback(() => {
-    setNeed18(false);
-  }, []);
-
-  const handleIsNot18 = useCallback(() => {
-    router.push("/");
-  }, []);
+  const [need18, handleIs18, handleIsNot18] = use18(props.board.need18up);
 
   return need18 ? (
     <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />

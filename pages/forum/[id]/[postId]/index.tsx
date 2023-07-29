@@ -14,6 +14,7 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useRouter } from "next/router";
 import { useCallback, useLayoutEffect, useState } from "react";
 import Need18Up from "../../../../components/layout/Need18Up/Need18Up";
+import use18 from "../../../../hooks/use18";
 
 type Props = {
   post: Post;
@@ -22,20 +23,8 @@ type Props = {
 const Page: NextPageWithLayout<Props> = (props: Props) => {
   const router = useRouter();
 
-  const [need18, setNeed18] = useState(false);
-
-  useLayoutEffect(() => {
-    if (props.post.need18up) {
-      setNeed18(true);
-    }
-  }, []);
-
-  const handleIs18 = useCallback(() => {
-    setNeed18(false);
-  }, []);
-  const handleIsNot18 = useCallback(() => {
-    router.push("/");
-  }, []);
+  // 18
+  const [need18, handleIs18, handleIsNot18] = use18(props.post.need18up);
 
   return need18 ? (
     <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />

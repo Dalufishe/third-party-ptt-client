@@ -34,6 +34,7 @@
     "react-redux": "^8.1.1",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
+    "redux-persist": "^6.0.0",
     "redux-thunk": "^2.4.2",
     "tailwind-merge": "^1.14.0",
     "tailwindcss-animate": "^1.0.6"
