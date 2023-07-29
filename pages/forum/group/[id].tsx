@@ -9,6 +9,7 @@ import {
 } from "../../../components/@/components/ui/tabs";
 import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -19,6 +20,8 @@ type Props = {
 };
 
 const Page: NextPage<Props> = (props: Props) => {
+  const router = useRouter();
+
   return (
     <div className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}>
       <Tabs defaultValue={forumsType[1].name} className={cn("w-full")}>
@@ -28,8 +31,11 @@ const Page: NextPage<Props> = (props: Props) => {
               key={forumType.name}
               value={forumType.name}
               className="w-full"
+              onClick={() => {
+                router.push(forumType.href);
+              }}
             >
-              <Link href={forumType.href}>{forumType.name}</Link>
+              {forumType.name}
             </TabsTrigger>
           ))}
         </TabsList>

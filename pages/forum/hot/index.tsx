@@ -11,6 +11,7 @@ import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
 import useScroll from "../../../hooks/useScroll";
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/router";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -22,6 +23,8 @@ type Props = {
 };
 
 const Page: NextPage<Props> = (props: Props) => {
+  const router = useRouter();
+
   const pageRef = useRef(null);
   const [pageEl, setPageEl] = useState(pageRef.current);
   const [isTabListHidden, setTabListHiddden] = useState(false);
@@ -59,8 +62,11 @@ const Page: NextPage<Props> = (props: Props) => {
               key={forumType.name}
               value={forumType.name}
               className="w-full"
+              onClick={() => {
+                router.push(forumType.href);
+              }}
             >
-              <Link href={forumType.href}>{forumType.name}</Link>
+              {forumType.name}
             </TabsTrigger>
           ))}
         </TabsList>
