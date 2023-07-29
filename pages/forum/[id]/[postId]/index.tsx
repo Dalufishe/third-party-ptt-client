@@ -71,8 +71,8 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                 {props.post.board}
               </CardDescription>
               <CardDescription className={cn("text-text2 ", "flex gap-2")}>
-                <p>{new Date(props.post.time).toLocaleString()}</p>
-                <p>{props.post.edited ? "(已編輯)" : ""})</p>
+                <span>{new Date(props.post.time).toLocaleString()}</span>
+                <span>{props.post.edited ? "(已編輯)" : ""})</span>
               </CardDescription>
             </div>
           </CardHeader>
@@ -101,7 +101,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
             <div>來自: {props.post.fromCountry}</div>
           </CardContent>
         </Card>
-        <Card className={cn("p-2", "rounded-none")}>
+        <Card className={cn("p-2", "rounded-none", "border-b-0")}>
           <CardContent className={cn("p-0")}>
             {props.post.comments.map((c) => (
               <Card
