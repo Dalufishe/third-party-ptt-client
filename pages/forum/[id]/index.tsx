@@ -68,7 +68,7 @@ const Page: NextPage<Props> = (props: Props) => {
       >
         {forum?.map((forumItem) => (
           <Link
-            key={forumItem.title}
+            key={forumItem.id}
             href={(function () {
               if (typeof window !== "undefined") {
                 return forumItem.href;

@@ -48,7 +48,7 @@ const Page: NextPage<Props> = (props: Props) => {
                 className="mt-0"
               >
                 {props.groups?.map((forum) => (
-                  <Link key={forum.boardName} href={forum.boardHref}>
+                  <Link key={forum.id} href={forum.boardHref}>
                     <Card className="rounded-none">
                       <CardContent
                         className={cn(

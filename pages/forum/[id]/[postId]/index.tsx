@@ -49,19 +49,19 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         <div>
           <h2
             className={cn(
-              "text-sm text-text3 whitespace-nowrap text-ellipsis overflow-hidden",
+              "text-sm text-text3 whitespace-nowrap text-center text-ellipsis overflow-hidden",
               "w-52"
             )}
           >
             {props.post.title}
           </h2>
         </div>
-        <div></div>
+        <div className={cn("w-5 h-5")}></div>
       </div>
       {/* Main Content */}
       <div className="w-screen h-[calc(100vh-96px)]  overflow-y-scroll">
         <Card className={cn("p-3", "rounded-none")}>
-          <CardHeader className="p-0">
+          <CardHeader className="p-0 gap-1">
             <CardDescription className="text-text2">
               @{props.post.author}
             </CardDescription>
@@ -70,8 +70,9 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
               <CardDescription className="text-text2">
                 {props.post.board}
               </CardDescription>
-              <CardDescription className="text-text2">
-                {new Date(props.post.time).toLocaleString()}
+              <CardDescription className={cn("text-text2 ", "flex gap-2")}>
+                <p>{new Date(props.post.time).toLocaleString()}</p>
+                <p>({props.post.edited ? "已編輯" : ""})</p>
               </CardDescription>
             </div>
           </CardHeader>
@@ -89,16 +90,22 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           </CardContent>
         </Card>
         <Card className={cn("p-3", "rounded-none")}>
-          <CardContent className={cn("p-0")}>
-            <div>{props.post.fromIp}</div>
-            <div>{props.post.fromCountry}</div>
+          <CardContent
+            className={cn(
+              "p-0",
+              "flex justify-between items-center gap-0.5",
+              "text-sm text-text3"
+            )}
+          >
+            <div>發送: {props.post.fromIp}</div>
+            <div>來自: {props.post.fromCountry}</div>
           </CardContent>
         </Card>
         <Card className={cn("p-2", "rounded-none")}>
           <CardContent className={cn("p-0")}>
             {props.post.comments.map((c) => (
               <Card
-                key={c.content}
+                key={c.id}
                 className={cn(
                   "p-0",
                   "rounded-none",

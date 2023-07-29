@@ -1,9 +1,9 @@
 import * as cheerio from "cheerio";
 import serializeCookie from "../utils/serializeCookie";
-import { headers } from "next/dist/client/components/headers";
-import { type } from "os";
+import idGenerator from "../utils/idGenerator";
 
 export type HotBoard = {
+  id: string;
   boardClass: string;
   boardName: string;
   boardTitle: string;
@@ -13,6 +13,7 @@ export type HotBoard = {
 };
 
 export type GroupBoard = {
+  id: string;
   boardClass: string;
   boardName: string;
   boardTitle: string;
@@ -20,6 +21,7 @@ export type GroupBoard = {
 };
 
 export type BoardItem = {
+  id: string;
   title: string;
   href: string;
   author: string;
@@ -41,6 +43,7 @@ export type Post = {
   fromCountry: string;
   edited: string;
   comments: {
+    id: string;
     tag: string;
     user: string;
     content: string;
@@ -63,6 +66,7 @@ class PTT {
 
     $(".b-ent").each(function () {
       hotBoards.push({
+        id: idGenerator(),
         boardClass: "",
         boardName: "",
         boardTitle: "",
@@ -122,6 +126,7 @@ class PTT {
 
     $(".b-ent").each(function () {
       groupBoards.push({
+        id: idGenerator(),
         boardClass: "",
         boardName: "",
         boardTitle: "",
@@ -192,6 +197,7 @@ class PTT {
     // analysize
     $(".r-ent").each(function () {
       board.push({
+        id: idGenerator(),
         title: "",
         href: "",
         author: "",
@@ -260,6 +266,7 @@ class PTT {
       edited: "",
       comments: [
         {
+          id: idGenerator(),
           tag: "",
           user: "",
           content: "",
@@ -318,14 +325,18 @@ class PTT {
 
     //* from, fromIp, edited
     $(".f2").each(function (index) {
+      const data = $(this).text();
       switch (index) {
         case 0:
-          // ※ 發信站: 批踢踢實業坊(ptt.cc), 來自: 223.136.150.126 (臺灣)
-          const data = $(this).text();
           post.fromIp = data.match(/\d+\.\d+\.\d+\.\d+/gu)?.toString() || "";
           let fc = data.match(/\([\u4E00-\u9FFF]+\)/gu)?.toString();
           fc = fc?.slice(1, fc.length - 1);
           post.fromCountry = fc || "";
+          break;
+        case 2:
+          post.edited =
+            data.match(/\d\d\/\d\d\/\d\d\d\d \d\d:\d\d:\d\d/gu)?.toString() ||
+            "";
           break;
       }
     });
@@ -337,6 +348,7 @@ class PTT {
       const content = $(this).find(".push-content").text().slice(2);
       const time = $(this).find(".push-ipdatetime").text();
       post.comments.push({
+        id: idGenerator(),
         tag,
         user,
         content,
