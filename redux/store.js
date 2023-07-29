@@ -6,9 +6,8 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import { createWrapper } from "next-redux-wrapper";
 
 // reducers
-import { setHotBoards } from "./reducers/setHotBoards.rdc";
+
 const reducers = combineReducers({
-  setHotBoards,
 });
 
 // middlewares
