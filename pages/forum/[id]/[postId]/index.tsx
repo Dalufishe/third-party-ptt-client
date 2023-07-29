@@ -85,6 +85,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           <CardContent className={cn("p-0")}>
             {props.post.comments.map((c) => (
               <Card
+                key={c.content}
                 className={cn(
                   "p-0",
                   "rounded-none",
