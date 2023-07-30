@@ -56,6 +56,11 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           content={props.post.title + " - 我の批踢踢"}
           key="title"
         />
+        <meta
+          property="og:description"
+          content={props.post.article.slice(0, 100)}
+          key="description"
+        />
       </Head>
       {/* replaced Navbar */}
       <Navbar
