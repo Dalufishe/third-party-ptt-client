@@ -44,6 +44,7 @@ export type Post = {
   time: number;
   board: string;
   article: string;
+  images: string[];
   fromIp: string;
   fromCountry: string;
   edited: string;
@@ -271,6 +272,7 @@ class PTT {
       time: 0,
       board: "",
       article: "",
+      images: [],
       fromIp: "",
       fromCountry: "",
       edited: "",
@@ -323,6 +325,7 @@ class PTT {
 
     //* board
     post.board = $(".article-metaline-right>.article-meta-value").text();
+
     //* article
     let article = "";
     article = $("#main-content").text();
@@ -332,6 +335,11 @@ class PTT {
       .join("--");
     article = article.split("\n").slice(1).join("\n");
     post.article = article;
+
+    //* images
+    $("#main-content .richcontent>img").each(function () {
+      post.images.push($(this).attr("src") || "");
+    });
 
     //* from, fromIp, edited
     const split = $("#main-content").html()?.split("--");
@@ -370,6 +378,24 @@ class PTT {
     post.comments = post.comments.slice(1);
 
     return post;
+  }
+  static imageReplacer(
+    content: string,
+    cb: (image: string, index: number) => any
+  ) {
+    const regexp = /https:\/\/i.imgur.com\/\w+.jpg/gu;
+    const matches = [...content.matchAll(regexp)];
+    let replaced = content.split(regexp);
+    let pos = 1;
+    let index = 0;
+    for (let match of matches) {
+      const matchValue = match[0];
+      replaced.splice(pos, 0, cb(matchValue, index));
+      pos += 2;
+      index += 1;
+    }
+    console.log(replaced);
+    return replaced;
   }
 }
 

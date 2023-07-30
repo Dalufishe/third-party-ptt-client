@@ -10,13 +10,12 @@ import {
 } from "../../../../components/@/components/ui/card";
 import { NextPageWithLayout } from "../../../../components/layout/NextPageWithLayout";
 import DefaultLayout from "../../../../components/layout/DefaultLayout";
-import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useRouter } from "next/router";
-import { useCallback, useLayoutEffect, useState } from "react";
 import Need18Up from "../../../../components/layout/Need18Up/Need18Up";
 import use18 from "../../../../hooks/use18";
 import Head from "next/head";
 import Navbar from "../../../../components/pages/post-page/Navbar";
+import Image from "next/image";
 
 type Props = {
   post: Post;
@@ -74,7 +73,19 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
               "text-text3"
             )}
           >
-            {props.post.article}
+            {PTT.imageReplacer(props.post.article, (img, index) => {
+              return (
+                <>
+                  {img}
+                  <Image
+                    src={props.post.images[index]}
+                    alt={props.post.title + "的照片"}
+                    width={500}
+                    height={500}
+                  />
+                </>
+              );
+            })}
           </CardContent>
         </Card>
         <Card className={cn("p-3", "rounded-none")}>
