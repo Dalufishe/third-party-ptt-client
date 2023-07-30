@@ -12,7 +12,7 @@ const Page = () => {
       )}
     >
       <div className="font-bold text-2xl">404</div>
-      <h1 className="text-xl text-text2">該文章已被刪除</h1>
+      <h1 className="text-xl text-text2">本文章已被刪除</h1>
       <Block value={2} />
       <Link href="/">
         <Button variant="secondary" size="sm">
