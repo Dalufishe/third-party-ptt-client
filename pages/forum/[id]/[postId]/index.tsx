@@ -16,6 +16,7 @@ import { useCallback, useLayoutEffect, useState } from "react";
 import Need18Up from "../../../../components/layout/Need18Up/Need18Up";
 import use18 from "../../../../hooks/use18";
 import Head from "next/head";
+import Navbar from "../../../../components/pages/post-page/Navbar";
 
 type Props = {
   post: Post;
@@ -38,33 +39,13 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         />
       </Head>
       {/* replaced Navbar */}
-      <div
-        className={cn(
-          "h-[48px] bg-brand",
-          "flex justify-between items-center",
-          "px-3"
-        )}
+      <Navbar
+        onClickLeft={() => {
+          router.push("/forum/" + props.post.board);
+        }}
       >
-        <div>
-          <AiOutlineArrowLeft
-            className={cn("w-5 h-5")}
-            onClick={() => {
-              router.push("/forum/" + props.post.board);
-            }}
-          />
-        </div>
-        <div>
-          <h2
-            className={cn(
-              "text-sm text-text3 whitespace-nowrap text-center text-ellipsis overflow-hidden",
-              "w-52"
-            )}
-          >
-            {props.post.title}
-          </h2>
-        </div>
-        <div className={cn("w-5 h-5")}></div>
-      </div>
+        {props.post.title}
+      </Navbar>
       {/* Main Content */}
       <div className="w-screen h-[calc(100vh-96px)]  overflow-y-scroll">
         <Card className={cn("p-3", "rounded-none")}>
