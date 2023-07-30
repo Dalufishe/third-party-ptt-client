@@ -10,6 +10,7 @@ import {
 import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import Head from "next/head";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -24,6 +25,10 @@ const Page: NextPage<Props> = (props: Props) => {
 
   return (
     <div className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}>
+      <Head>
+        <title>分類看板 - 我の批踢踢</title>
+        <meta property="og:title" content="分類看板 - 我の批踢踢" />
+      </Head>
       <Tabs defaultValue={forumsType[1].name} className={cn("w-full")}>
         <TabsList className="w-full rounded-none">
           {forumsType.map((forumType) => (

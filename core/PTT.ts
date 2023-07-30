@@ -30,7 +30,12 @@ export type BoardItem = {
   level: number;
 };
 
-export type Board = { need18up: boolean; data: BoardItem[]; currentId: string };
+export type Board = {
+  need18up: boolean;
+  data: BoardItem[];
+  currentId: string;
+  boardName: string;
+};
 
 export type Post = {
   need18up: boolean;
@@ -247,6 +252,7 @@ class PTT {
       currentId,
       need18up,
       data: board,
+      boardName: name,
     };
   }
   static async getPost(page: string): Promise<Post> {

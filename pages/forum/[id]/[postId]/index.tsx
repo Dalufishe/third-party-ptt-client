@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import { useCallback, useLayoutEffect, useState } from "react";
 import Need18Up from "../../../../components/layout/Need18Up/Need18Up";
 import use18 from "../../../../hooks/use18";
+import Head from "next/head";
 
 type Props = {
   post: Post;
@@ -30,6 +31,13 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />
   ) : (
     <>
+      <Head>
+        <title>{props.post.title} - 我の批踢踢</title>
+        <meta
+          property="og:title"
+          content={props.post.title + " - 我の批踢踢"}
+        />
+      </Head>
       {/* replaced Navbar */}
       <div
         className={cn(

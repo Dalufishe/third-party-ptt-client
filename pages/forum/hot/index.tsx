@@ -13,6 +13,7 @@ import useScroll from "../../../hooks/useScroll";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import useScrollMemo from "../../../hooks/useScrollMemo";
+import Head from "next/head";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -51,6 +52,10 @@ const Page: NextPage<Props> = (props: Props) => {
       ref={pageRef}
       className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}
     >
+      <Head>
+        <title>熱門看板 - 我の批踢踢</title>
+        <meta property="og:title" content="熱門看板 - 我の批踢踢" />
+      </Head>
       <Tabs defaultValue={forumsType[0].name} className={cn("w-full")}>
         <TabsList
           className={cn(
