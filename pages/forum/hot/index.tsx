@@ -14,6 +14,7 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import useScrollMemo from "../../../hooks/useScrollMemo";
 import Head from "next/head";
+import { css } from "@emotion/css";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },

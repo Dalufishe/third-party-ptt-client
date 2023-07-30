@@ -23,7 +23,6 @@ type Props = {
 
 const Page: NextPageWithLayout<Props> = (props: Props) => {
   const router = useRouter();
-
   // 18
   const [need18, handleIs18, handleIsNot18] = use18(props.post.need18up);
 
@@ -122,19 +121,18 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                 )}
               >
                 <div className={cn("px-1 py-3")}>
-                  <div className="flex gap-2">
-                    {" "}
+                  <div className="flex gap-3">
                     <h5
                       className={cn(
                         "text-base",
                         c.tag === "推" ? "text-text1" : "",
                         c.tag === "噓" ? "text-red-400" : "",
-                        c.tag === "→ " ? "text-red-400" : ""
+                        c.tag === "→" ? "text-red-400" : ""
                       )}
                     >
                       {c.tag}
                     </h5>
-                    <h5 className="text-text3">{c.user}:</h5>
+                    <h5 className="text-text3 whitespace-nowrap">{c.user}:</h5>
                     <h5 className="text-text3">{c.content}</h5>
                   </div>
                 </div>

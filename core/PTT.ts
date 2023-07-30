@@ -355,10 +355,10 @@ class PTT {
 
     //* comments
     $(".push").each(function (index) {
-      const tag = $(this).find(".push-tag").text();
-      const user = $(this).find(".push-userid").text();
-      const content = $(this).find(".push-content").text().slice(2);
-      const time = $(this).find(".push-ipdatetime").text();
+      const tag = $(this).find(".push-tag").text().trim();
+      const user = $(this).find(".push-userid").text().trim();
+      const content = $(this).find(".push-content").text().slice(2).trim();
+      const time = $(this).find(".push-ipdatetime").text().trim();
       post.comments.push({
         id: idGenerator(),
         tag,
