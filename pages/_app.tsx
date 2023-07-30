@@ -28,10 +28,11 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         />
         <meta name="creator" content="Dalufishe" />
         <title>我の批踢踢</title>
-        <meta property="og:title" content="我の批踢踢" />
+        <meta property="og:title" content="我の批踢踢" key="title" />
         <meta
           property="og:description"
           content="全新的 PTT 批踢踢第三方客戶端，快速、簡潔。"
+          key="description"
         />
         <meta
           property="og:url"
@@ -39,7 +40,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
             process.env.NEXT_PUBLIC_PORT
               ? ":" + process.env.NEXT_PUBLIC_PORT
               : ""
-          }${router.pathname}`}
+          }`}
         />
         <meta property="og:image" content="" />
         <meta property="og:type" content="website" />

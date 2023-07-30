@@ -66,6 +66,7 @@ const Page: NextPage<Props> = (props: Props) => {
         <meta
           property="og:title"
           content={props.board.boardName + " - 我の批踢踢"}
+          key="title"
         />
       </Head>
       {need18 ? (

@@ -55,7 +55,7 @@ const Page: NextPage<Props> = (props: Props) => {
     >
       <Head>
         <title>熱門看板 - 我の批踢踢</title>
-        <meta property="og:title" content="熱門看板 - 我の批踢踢" />
+        <meta property="og:title" content="熱門看板 - 我の批踢踢" key="title" />
       </Head>
       <Tabs defaultValue={forumsType[0].name} className={cn("w-full")}>
         <TabsList

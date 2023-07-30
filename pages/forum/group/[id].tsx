@@ -27,7 +27,7 @@ const Page: NextPage<Props> = (props: Props) => {
     <div className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}>
       <Head>
         <title>分類看板 - 我の批踢踢</title>
-        <meta property="og:title" content="分類看板 - 我の批踢踢" />
+        <meta property="og:title" content="分類看板 - 我の批踢踢" key="title" />
       </Head>
       <Tabs defaultValue={forumsType[1].name} className={cn("w-full")}>
         <TabsList className="w-full rounded-none">
