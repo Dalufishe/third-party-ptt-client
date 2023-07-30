@@ -7,7 +7,7 @@
 * {
   margin: 0;
   padding: 0;
-  border-box: box-sizing;
+  box-sizing: border-box;
 }
 
 body {
@@ -17,4 +17,16 @@ body {
   font-family: "Roboto", sans-serif;
   overflow: hidden;
   overscroll-behavior: none;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 0% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
 }
