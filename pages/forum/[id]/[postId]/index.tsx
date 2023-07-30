@@ -49,7 +49,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           <AiOutlineArrowLeft
             className={cn("w-5 h-5")}
             onClick={() => {
-              router.back();
+              router.push("/forum/" + props.post.board);
             }}
           />
         </div>
