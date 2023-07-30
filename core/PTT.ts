@@ -65,7 +65,7 @@ class PTT {
     const hotBoards: HotBoard[] = [];
 
     $(".b-ent").each(function () {
-  (idGenerator());
+      idGenerator();
       hotBoards.push({
         id: idGenerator(),
         boardClass: "",
@@ -209,12 +209,15 @@ class PTT {
     });
 
     $(".title").each(function (index) {
+      // title
       board[index].title = $(this).text();
-    });
-    $(".title>a").each(function (index) {
-      const arr = $(this).attr("href")?.split("/");
-      const data = arr?.[arr?.length - 2] + "/" + arr?.[arr?.length - 1];
-      board[index].href = data?.match(/.+(?=\.html)/gu)?.toString() as string;
+      // href
+      const aTag = $(this).find("a");
+      if (aTag.text()) {
+        const arr = aTag.attr("href")?.split("/");
+        const data = arr?.[arr?.length - 2] + "/" + arr?.[arr?.length - 1];
+        board[index].href = data?.match(/.+(?=\.html)/gu)?.toString() as string;
+      }
     });
     $(".author").each(function (index) {
       board[index].author = $(this).text();
@@ -326,7 +329,7 @@ class PTT {
 
     //* from, fromIp, edited
     const split = $("#main-content").html()?.split("--");
-    const _$ = cheerio.load(split?.[split?.length - 1] as string);
+    const _$ = cheerio.load(split?.[split?.length - 1] || "");
     _$(".f2").each(function (index) {
       const data = $(this).text();
       switch (index) {

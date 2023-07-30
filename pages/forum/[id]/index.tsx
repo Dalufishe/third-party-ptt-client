@@ -47,6 +47,17 @@ const Page: NextPage<Props> = (props: Props) => {
 
   const [need18, handleIs18, handleIsNot18] = use18(props.board.need18up);
 
+  // fn
+  const handleLink = useCallback((forumItem: BoardItem) => {
+    if (typeof window !== "undefined") {
+      if (forumItem.href === "") {
+        return `/forum/page-delete`;
+      }
+      return `/forum/${forumItem.href}`;
+    }
+    return "";
+  }, []);
+
   return need18 ? (
     <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />
   ) : (
@@ -67,15 +78,7 @@ const Page: NextPage<Props> = (props: Props) => {
         loader={<div></div>}
       >
         {forum?.map((forumItem) => (
-          <Link
-            key={forumItem.id}
-            href={(function () {
-              if (typeof window !== "undefined") {
-                return forumItem.href;
-              }
-              return "";
-            })()}
-          >
+          <Link key={forumItem.id} href={handleLink(forumItem)}>
             <Card className="rounded-none">
               <CardContent
                 className={cn(
@@ -129,7 +132,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = hotBoards.map((board) => "/forum/" + board.boardHref);
   return {
     paths,
-    fallback: true,
+    fallback: false,
   };
 };
 

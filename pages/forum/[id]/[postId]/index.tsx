@@ -1,4 +1,4 @@
-import { GetServerSideProps } from "next";
+import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
 import PTT, { Post } from "../../../../core/PTT";
 import { cn } from "../../../../components/@/lib/utils";
 import {
@@ -143,8 +143,30 @@ Page.getLayout = function getLayout(page) {
   return <DefaultLayout noNavbar>{page}</DefaultLayout>;
 };
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const page = (ctx.query?.id + "/" + ctx.query?.postId) as string;
+export const getStaticPaths: GetStaticPaths = async () => {
+  const hotBoards = await PTT.getHotBoards();
+  const paths: string[] = [];
+  await Promise.all(
+    hotBoards.map(async (b) => {
+      let path = "";
+      const board = await PTT.getBoard(b.boardName);
+      board.data.map((boardItem) => {
+        if (boardItem.href) {
+          path = "/forum/" + boardItem.href;
+          paths.push(path);
+        }
+      });
+    })
+  );
+  return {
+    paths,
+    fallback: false,
+  };
+};
+
+export const getStaticProps: GetStaticProps = async (ctx) => {
+  const params = ctx.params;
+  const page = params?.id + "/" + params?.postId;
   const post = await PTT.getPost(page);
 
   return {
