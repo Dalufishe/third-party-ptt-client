@@ -14,7 +14,7 @@ const Navbar = () => {
       )}
     >
       <Link href="/">
-        <h1 className={cn("text-[#ff6] text-xl font-bold")}>批踢踢</h1>
+        <h1 className={cn("text-[#ff6] text-xl font-bold")}>我の批踢踢</h1>
       </Link>
       <div className={cn("text-2xl")}>
         <AiOutlineSearch />
