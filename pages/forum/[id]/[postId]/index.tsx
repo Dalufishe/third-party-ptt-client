@@ -53,20 +53,20 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   ) : (
     <>
       <Head>
-        <title>{props.post.title} - 我の批踢踢</title>
+        <title>{props.post?.title} - 我の批踢踢</title>
         <meta
           property="og:title"
-          content={props.post.title + " - 我の批踢踢"}
+          content={props.post?.title + " - 我の批踢踢"}
           key="title"
         />
         <meta
           property="og:description"
-          content={props.post.article.slice(0, 100)}
+          content={props.post?.article.slice(0, 100)}
           key="description"
         />
         <meta
           property="og:url"
-          content={`${getSiteURL()}/forum/${props.post.page}`}
+          content={`${getSiteURL()}/forum/${props.post?.page}`}
           key="url"
         />
       </Head>
@@ -83,16 +83,16 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         <Card className={cn("p-3", "rounded-none")}>
           <CardHeader className="p-0 gap-1">
             <CardDescription className="text-text2">
-              @{props.post.author}
+              @{props.post?.author}
             </CardDescription>
-            <CardTitle className="text-xl">{props.post.title}</CardTitle>
+            <CardTitle className="text-xl">{props.post?.title}</CardTitle>
             <div className="flex justify-between">
               <CardDescription className="text-text2">
-                {props.post.board}
+                {props.post?.board}
               </CardDescription>
               <CardDescription className={cn("text-text2 ", "flex gap-2")}>
-                <span>{new Date(props.post.time).toLocaleString()}</span>
-                <span>{props.post.edited ? "(已編輯)" : ""}</span>
+                <span>{new Date(props.post?.time).toLocaleString()}</span>
+                <span>{props.post?.edited ? "(已編輯)" : ""}</span>
               </CardDescription>
             </div>
           </CardHeader>
@@ -106,14 +106,14 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
               "text-text3"
             )}
           >
-            {PTT.imageReplacer(props.post.article, (img, index) => {
+            {PTT.imageReplacer(props.post?.article, (img, index) => {
               return (
                 <div key={index}>
                   {img}
                   <Image
                     priority
-                    src={props.post.images[index]}
-                    alt={props.post.title + "的照片"}
+                    src={props.post?.images[index]}
+                    alt={props.post?.title + "的照片"}
                     width={500}
                     height={500}
                     placeholder="blur"
@@ -134,8 +134,8 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
               "text-sm text-text3"
             )}
           >
-            <div>發送: {props.post.fromIp}</div>
-            <div>來自: {props.post.fromCountry}</div>
+            <div>發送: {props.post?.fromIp}</div>
+            <div>來自: {props.post?.fromCountry}</div>
           </CardContent>
         </Card>
         <Card className={cn("p-2", "rounded-none", "border-b-0")}>
