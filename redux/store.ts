@@ -32,6 +32,5 @@ export const store = createStore(
 const makeStore = () => store;
 
 const wrapper = createWrapper(makeStore);
-const persistor = persistStore(store);
 
-export { wrapper, persistor };
+export { wrapper };
