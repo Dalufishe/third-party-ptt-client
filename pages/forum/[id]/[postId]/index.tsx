@@ -16,6 +16,7 @@ import use18 from "../../../../hooks/use18";
 import Head from "next/head";
 import Navbar from "../../../../components/pages/post-page/Navbar";
 import Image from "next/image";
+import IsBottom from "../../../../components/layout/IsBottom/IsBottom";
 
 const convertImage = (w: number, h: number) => `
   <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -162,6 +163,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
             ))}
           </CardContent>
         </Card>
+        <IsBottom />
       </div>
     </>
   );

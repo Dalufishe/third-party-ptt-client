@@ -15,6 +15,7 @@ import { useRouter } from "next/router";
 import useScrollMemo from "../../../hooks/useScrollMemo";
 import Head from "next/head";
 import { css } from "@emotion/css";
+import IsBottom from "../../../components/layout/IsBottom/IsBottom";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -123,6 +124,7 @@ const Page: NextPage<Props> = (props: Props) => {
                     </Card>
                   </Link>
                 ))}
+                <IsBottom />
               </TabsContent>
             );
           }

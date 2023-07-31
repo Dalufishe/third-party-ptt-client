@@ -11,6 +11,7 @@ import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
+import IsBottom from "../../../components/layout/IsBottom/IsBottom";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -75,6 +76,7 @@ const Page: NextPage<Props> = (props: Props) => {
                     </Card>
                   </Link>
                 ))}
+                <IsBottom />
               </TabsContent>
             );
           }
