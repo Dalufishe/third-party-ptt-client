@@ -3,11 +3,13 @@ import { Analytics } from "@vercel/analytics/react";
 import DefaultLayout from "../components/layout/DefaultLayout";
 import { NextPageWithLayout } from "../components/layout/NextPageWithLayout";
 import { AppProps } from "next/app";
-import { store, wrapper } from "../redux/store";
+import { persistor, store, wrapper } from "../redux/store";
 import { Provider } from "react-redux";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import getSiteURL from "../utils/getSiteURL";
+import { useEffect, useState } from "react";
+import { PersistGate } from "redux-persist/integration/react";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -15,7 +17,10 @@ type AppPropsWithLayout = AppProps & {
 
 function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const router = useRouter();
-
+  const [isClientSide, setIsClientSide] = useState(false);
+  useEffect(() => {
+    setIsClientSide(true);
+  }, []);
   const getLayout =
     Component.getLayout || ((page) => <DefaultLayout>{page}</DefaultLayout>);
   return getLayout(
@@ -38,10 +43,19 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         <meta property="og:image" content="" />
         <meta property="og:type" content="website" />
       </Head>
-      <Provider store={store}>
-        <Component {...pageProps} />
-        <Analytics />
-      </Provider>
+      {isClientSide ? (
+        <PersistGate persistor={persistor}>
+          <Provider store={store}>
+            <Component {...pageProps} />
+            <Analytics />
+          </Provider>
+        </PersistGate>
+      ) : (
+        <Provider store={store}>
+          <Component {...pageProps} />
+          <Analytics />
+        </Provider>
+      )}
     </div>
   );
 }

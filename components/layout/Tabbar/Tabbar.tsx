@@ -1,11 +1,16 @@
 import React from "react";
 import { cn } from "../../../utils/cn";
-import { AiFillAppstore, AiOutlineMenu } from "react-icons/ai";
+import {
+  AiFillAppstore,
+  AiOutlineMenu,
+  AiOutlineHome,
+  AiOutlineSearch,
+} from "react-icons/ai";
 import Link from "next/link";
 
 const tabs = [
-  { id: 1, icon: <AiFillAppstore />, href: "/" },
-  { id: 2, icon: <AiFillAppstore />, href: "/" },
+  { id: 1, icon: <AiOutlineHome />, href: "/" },
+  { id: 2, icon: <AiOutlineSearch />, href: "/" },
   { id: 3, icon: <AiFillAppstore />, href: "/" },
   { id: 4, icon: <AiOutlineMenu />, href: "/more" },
 ];
