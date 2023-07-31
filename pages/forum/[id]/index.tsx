@@ -17,6 +17,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import use18 from "../../../hooks/use18";
 import Head from "next/head";
 import useScroll from "../../../hooks/useScroll";
+import getSiteURL from "../../../utils/getSiteURL";
 
 type Props = {
   board: Board;
@@ -86,6 +87,11 @@ const Page: NextPage<Props> = (props: Props) => {
           property="og:title"
           content={props.board.boardName + " - 我の批踢踢"}
           key="title"
+        />
+        <meta
+          property="og:url"
+          content={`${getSiteURL()}/forum/${props.board.boardName}`}
+          key="url"
         />
       </Head>
       {need18 ? (

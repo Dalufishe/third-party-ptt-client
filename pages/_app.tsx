@@ -8,6 +8,7 @@ import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import getSiteURL from "../utils/getSiteURL";
 
 type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout;
@@ -36,11 +37,8 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
         />
         <meta
           property="og:url"
-          content={`${process.env.NEXT_PUBLIC_HOST}${
-            process.env.NEXT_PUBLIC_PORT
-              ? ":" + process.env.NEXT_PUBLIC_PORT
-              : ""
-          }`}
+          content={getSiteURL()}
+          key="url"
         />
         <meta property="og:image" content="" />
         <meta property="og:type" content="website" />

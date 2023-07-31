@@ -12,6 +12,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import IsBottom from "../../../components/layout/IsBottom/IsBottom";
+import getSiteURL from "../../../utils/getSiteURL";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -29,6 +30,11 @@ const Page: NextPage<Props> = (props: Props) => {
       <Head>
         <title>分類看板 - 我の批踢踢</title>
         <meta property="og:title" content="分類看板 - 我の批踢踢" key="title" />
+        <meta
+          property="og:url"
+          content={`${getSiteURL()}/forum/hot`}
+          key="url"
+        />
       </Head>
       <Tabs defaultValue={forumsType[1].name} className={cn("w-full")}>
         <TabsList className="w-full rounded-none">

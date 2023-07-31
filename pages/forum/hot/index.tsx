@@ -16,6 +16,7 @@ import useScrollMemo from "../../../hooks/useScrollMemo";
 import Head from "next/head";
 import { css } from "@emotion/css";
 import IsBottom from "../../../components/layout/IsBottom/IsBottom";
+import getSiteURL from "../../../utils/getSiteURL";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -57,6 +58,7 @@ const Page: NextPage<Props> = (props: Props) => {
       <Head>
         <title>熱門看板 - 我の批踢踢</title>
         <meta property="og:title" content="熱門看板 - 我の批踢踢" key="title" />
+        <meta property="og:url" content={`${getSiteURL()}/forum/hot`} key="url" />
       </Head>
       <Tabs defaultValue={forumsType[0].name} className={cn("w-full")}>
         <TabsList

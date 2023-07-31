@@ -38,6 +38,7 @@ export type Board = {
 };
 
 export type Post = {
+  page: string;
   need18up: boolean;
   title: string;
   author: string;
@@ -266,6 +267,7 @@ class PTT {
 
     // analysize
     const post: Post = {
+      page,
       need18up: false,
       title: "",
       author: "",

@@ -17,6 +17,7 @@ import Head from "next/head";
 import Navbar from "../../../../components/pages/post-page/Navbar";
 import Image from "next/image";
 import IsBottom from "../../../../components/layout/IsBottom/IsBottom";
+import getSiteURL from "../../../../utils/getSiteURL";
 
 const convertImage = (w: number, h: number) => `
   <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -61,6 +62,11 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           property="og:description"
           content={props.post.article.slice(0, 100)}
           key="description"
+        />
+        <meta
+          property="og:url"
+          content={`${getSiteURL()}/forum/${props.post.page}`}
+          key="url"
         />
       </Head>
       {/* replaced Navbar */}
