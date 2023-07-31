@@ -37,7 +37,7 @@ const Page: NextPage<Props> = (props: Props) => {
 
   useEffect(() => {
     setPageEl(pageRef.current);
-  }, [pageRef.current]);
+  }, []);
 
   useScroll(
     pageEl,

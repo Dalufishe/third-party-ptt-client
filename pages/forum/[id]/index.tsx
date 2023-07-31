@@ -39,13 +39,13 @@ const Page: NextPage<Props> = (props: Props) => {
     const json = await res.json();
     setForum([...forum, ...json?.data]);
     setCurrentId(String(Number(currentId) - 1));
-  }, [currentId]);
+  }, [currentId, forum, router.query.id]);
 
   useEffect(() => {
     if (forum?.length < 20) {
       fetchNextData();
     }
-  }, []);
+  }, [fetchNextData, forum?.length]);
 
   // 18
   const [need18, handleIs18, handleIsNot18] = use18(props.board.need18up);
@@ -57,7 +57,7 @@ const Page: NextPage<Props> = (props: Props) => {
 
   useEffect(() => {
     setPageEl(pageRef.current);
-  }, [pageRef.current]);
+  }, []);
 
   useScroll(
     pageEl,

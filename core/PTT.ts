@@ -388,7 +388,6 @@ class PTT {
       /https?:\/\/(?:[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=]|%[a-fA-F0-9]{2})*\.(?:jpg|jpeg|png|gif|bmp|svg|webp)/gu;
     const matches = [...content.matchAll(regexp)];
     let replaced = content.split(regexp);
-    console.log(replaced);
     let pos = 1;
     let index = 0;
     for (let match of matches) {

@@ -7,7 +7,7 @@ const IndexPage: NextPage = () => {
 
   useEffect(() => {
     router.push("/forum/hot");
-  }, []);
+  }, [router]);
 
   return <></>;
 };
