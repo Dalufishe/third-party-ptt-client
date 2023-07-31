@@ -46,7 +46,7 @@ type Props = {
 const Page: NextPageWithLayout<Props> = (props: Props) => {
   const router = useRouter();
   // 18
-  const [need18, handleIs18, handleIsNot18] = use18(props.post.need18up);
+  const [need18, handleIs18, handleIsNot18] = use18(props.post?.need18up);
 
   return need18 ? (
     <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />
@@ -108,7 +108,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           >
             {PTT.imageReplacer(props.post.article, (img, index) => {
               return (
-                <>
+                <div key={index}>
                   {img}
                   <Image
                     priority
@@ -121,7 +121,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                       convertImage(700, 475)
                     )}`}
                   />
-                </>
+                </div>
               );
             })}
           </CardContent>
