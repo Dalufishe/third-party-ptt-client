@@ -337,7 +337,6 @@ class PTT {
       .join("--");
     article = article.split("\n").slice(1).join("\n");
     post.article = article;
-
     //* images
     $("#main-content .richcontent>img").each(function () {
       post.images.push($(this).attr("src") || "");
@@ -385,9 +384,11 @@ class PTT {
     content: string,
     cb: (image: string, index: number) => any
   ) {
-    const regexp = /https?:\/\/.+(jpg|png|webp|jpeg|gif)/gu;
+    const regexp =
+      /https?:\/\/(?:[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=]|%[a-fA-F0-9]{2})*\.(?:jpg|jpeg|png|gif|bmp|svg|webp)/gu;
     const matches = [...content.matchAll(regexp)];
     let replaced = content.split(regexp);
+    console.log(replaced);
     let pos = 1;
     let index = 0;
     for (let match of matches) {
@@ -396,7 +397,6 @@ class PTT {
       pos += 2;
       index += 1;
     }
-    console.log(replaced);
     return replaced;
   }
 }
