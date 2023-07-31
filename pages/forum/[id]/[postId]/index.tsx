@@ -73,7 +73,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
       {/* replaced Navbar */}
       <Navbar
         onClickLeft={() => {
-          router.push("/forum/" + props.post.board);
+          router.push("/forum/" + props.post?.board);
         }}
       >
         {props.post?.title}
@@ -140,7 +140,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         </Card>
         <Card className={cn("p-2", "rounded-none", "border-b-0")}>
           <CardContent className={cn("p-0")}>
-            {props.post.comments.map((c) => (
+            {props.post?.comments.map((c) => (
               <Card
                 key={c.id}
                 className={cn(
@@ -162,8 +162,8 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                     >
                       {c.tag}
                     </h5>
-                    <h5 className="text-text3 whitespace-nowrap">{c.user}:</h5>
-                    <h5 className="text-text3">{c.content}</h5>
+                    <h5 className="text-text3 whitespace-nowrap">{c?.user}:</h5>
+                    <h5 className="text-text3">{c?.content}</h5>
                   </div>
                 </div>
               </Card>
