@@ -18,6 +18,7 @@ import Navbar from "../../../../components/pages/post-page/Navbar";
 import Image from "next/image";
 import IsBottom from "../../../../components/layout/IsBottom/IsBottom";
 import getSiteURL from "../../../../utils/getSiteURL";
+import { wrapper } from "../../../../redux/store";
 
 const convertImage = (w: number, h: number) => `
   <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -196,19 +197,21 @@ export const getStaticPaths: GetStaticPaths = async () => {
   );
   return {
     paths,
-    fallback: "blocking",
+    fallback: true,
   };
 };
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  const params = ctx.params;
-  const page = params?.id + "/" + params?.postId;
-  const post = await PTT.getPost(page);
+export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
+  () => async (ctx) => {
+    const params = ctx.params;
+    const page = params?.id + "/" + params?.postId;
+    const post = await PTT.getPost(page);
 
-  return {
-    props: { post },
-    revalidate: 10,
-  };
-};
+    return {
+      props: { post },
+      revalidate: 10,
+    };
+  }
+);
 
 export default Page;

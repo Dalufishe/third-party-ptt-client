@@ -13,6 +13,7 @@ import { useRouter } from "next/router";
 import Head from "next/head";
 import IsBottom from "../../../components/layout/IsBottom/IsBottom";
 import getSiteURL from "../../../utils/getSiteURL";
+import { wrapper } from "../../../redux/store";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -97,15 +98,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fallback: true,
   };
 };
-export const getStaticProps: GetStaticProps = async (context) => {
-  const groupId = context.params?.id as string | undefined;
-  const groups = await PTT.getGroupBoards(groupId);
-  return {
-    props: {
-      groups,
-      revalidate: 3,
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
+  () => async (context) => {
+    const groupId = context.params?.id as string | undefined;
+    const groups = await PTT.getGroupBoards(groupId);
+    return {
+      props: {
+        groups,
+        revalidate: 3,
+      },
+    };
+  }
+);
 
 export default Page;

@@ -18,6 +18,7 @@ import use18 from "../../../hooks/use18";
 import Head from "next/head";
 import useScroll from "../../../hooks/useScroll";
 import getSiteURL from "../../../utils/getSiteURL";
+import { wrapper } from "../../../redux/store";
 
 type Props = {
   board: Board;
@@ -187,16 +188,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
   };
 };
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  const forumId = context.params?.id as string;
-  const board = await PTT.getBoard(forumId);
+export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
+  () => async (context) => {
+    const forumId = context.params?.id as string;
+    const board = await PTT.getBoard(forumId);
 
-  return {
-    props: {
-      board,
-    },
-    revalidate: 3,
-  };
-};
+    return {
+      props: {
+        board,
+      },
+      revalidate: 3,
+    };
+  }
+);
 
 export default Page;

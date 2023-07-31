@@ -53,10 +53,4 @@ const Page = () => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async (ctx) => {
-  return {
-    props: {},
-  };
-};
-
 export default Page;

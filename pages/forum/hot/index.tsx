@@ -17,6 +17,7 @@ import Head from "next/head";
 import { css } from "@emotion/css";
 import IsBottom from "../../../components/layout/IsBottom/IsBottom";
 import getSiteURL from "../../../utils/getSiteURL";
+import { wrapper } from "../../../redux/store";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -58,7 +59,11 @@ const Page: NextPage<Props> = (props: Props) => {
       <Head>
         <title>熱門看板 - 我の批踢踢</title>
         <meta property="og:title" content="熱門看板 - 我の批踢踢" key="title" />
-        <meta property="og:url" content={`${getSiteURL()}/forum/hot`} key="url" />
+        <meta
+          property="og:url"
+          content={`${getSiteURL()}/forum/hot`}
+          key="url"
+        />
       </Head>
       <Tabs defaultValue={forumsType[0].name} className={cn("w-full")}>
         <TabsList
@@ -136,14 +141,16 @@ const Page: NextPage<Props> = (props: Props) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  const forums = await PTT.getHotBoards();
-  return {
-    props: {
-      forums,
-      revalidate: 3,
-    },
-  };
-};
+export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
+  () => async () => {
+    const forums = await PTT.getHotBoards();
+    return {
+      props: {
+        forums,
+        revalidate: 3,
+      },
+    };
+  }
+);
 
 export default Page;

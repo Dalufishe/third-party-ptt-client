@@ -35,19 +35,13 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           content="全新的 PTT 批踢踢第三方客戶端，快速、簡潔。"
           key="description"
         />
-        <meta
-          property="og:url"
-          content={getSiteURL()}
-          key="url"
-        />
+        <meta property="og:url" content={getSiteURL()} key="url" />
         <meta property="og:image" content="" />
         <meta property="og:type" content="website" />
       </Head>
       <Provider store={store}>
-        <PersistGate persistor={persistor}>
-          <Component {...pageProps} />
-          <Analytics />
-        </PersistGate>
+        <Component {...pageProps} />
+        <Analytics />
       </Provider>
     </div>
   );
