@@ -1,6 +1,6 @@
 import { GetStaticProps } from "next";
 import MoreItem from "../../components/pages/more-page/MoreItem";
-import { AiFillSetting, AiFillBug, AiOutlineUser } from "react-icons/ai";
+import { AiFillSetting, AiFillBug } from "react-icons/ai";
 import { cn } from "../../components/@/lib/utils";
 import {
   Card,
@@ -14,7 +14,10 @@ import { tailwind_config } from "../../utils/twconf2js";
 const Page = () => {
   return (
     <div
-      className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll", "p-3")}
+      className={cn(
+        "w-screen h-[calc(100vh-96px)] overflow-y-scroll",
+        "p-3 pt-4"
+      )}
     >
       <Card
         className={cn(
@@ -26,8 +29,8 @@ const Page = () => {
               ${tailwind_config.theme.colors.primary},
               ${tailwind_config.theme.colors.secondary}
             );
-            background-size: 100% 200%;
-            animation: gradient 5s ease infinite;
+            background-size: 100% 300%;
+            animation: gradient 7s ease infinite;
           `
         )}
       >

@@ -16,6 +16,7 @@ import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import use18 from "../../../hooks/use18";
 import Head from "next/head";
+import useScroll from "../../../hooks/useScroll";
 
 type Props = {
   board: Board;
@@ -45,8 +46,26 @@ const Page: NextPage<Props> = (props: Props) => {
   }, []);
 
   // 18
-
   const [need18, handleIs18, handleIsNot18] = use18(props.board.need18up);
+
+  // scroll
+  const pageRef = useRef(null);
+  const [pageEl, setPageEl] = useState(pageRef.current);
+  const [isTabListHidden, setTabListHiddden] = useState(false);
+
+  useEffect(() => {
+    setPageEl(pageRef.current);
+  }, [pageRef.current]);
+
+  useScroll(
+    pageEl,
+    () => {
+      setTabListHiddden(false);
+    },
+    () => {
+      setTabListHiddden(true);
+    }
+  );
 
   // fn
   const handleLink = useCallback((forumItem: BoardItem) => {
@@ -73,14 +92,22 @@ const Page: NextPage<Props> = (props: Props) => {
         <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />
       ) : (
         <div
+          ref={pageRef}
           id="react-infinite-scroll-component"
           className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}
         >
           <Input
             type="text"
-            placeholder="搜尋文章..."
-            className={cn("h-[48px]", "rounded-none")}
+            placeholder={`在 ${props.board.boardName} 版搜尋文章...`}
+            className={cn(
+              "h-[48px]",
+              "rounded-none",
+              "sticky",
+              isTabListHidden ? "top-0" : "top-[-48px]",
+              "transition-all"
+            )}
           />
+
           <InfiniteScroll
             scrollableTarget="react-infinite-scroll-component"
             dataLength={forum?.length}
