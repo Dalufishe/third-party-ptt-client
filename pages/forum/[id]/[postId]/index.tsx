@@ -76,7 +76,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           router.push("/forum/" + props.post.board);
         }}
       >
-        {props.post.title}
+        {props.post?.title}
       </Navbar>
       {/* Main Content */}
       <div className="w-screen h-[calc(100vh-96px)]  overflow-y-scroll">
