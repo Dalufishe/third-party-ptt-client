@@ -383,7 +383,7 @@ class PTT {
     content: string,
     cb: (image: string, index: number) => any
   ) {
-    const regexp = /https:\/\/i.imgur.com\/[\w\.]+ /gu;
+    const regexp = /https:\/\/.+(jpg|png|webp|jpeg|gif)/gu;
     const matches = [...content.matchAll(regexp)];
     let replaced = content.split(regexp);
     let pos = 1;
