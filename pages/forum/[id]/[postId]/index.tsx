@@ -206,7 +206,6 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
     const params = ctx.params;
     const page = params?.id + "/" + params?.postId;
     const post = await PTT.getPost(page);
-    console.log(post); 
     return {
       props: { post },
       revalidate: 10,

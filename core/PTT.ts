@@ -196,7 +196,7 @@ class PTT {
       if (index === 1) {
         const split = $(this).attr("href")?.split("/") || [];
 
-        currentId = split[split?.length - 1].match(/\d+/gu)?.toString() || "";
+        currentId = split?.[split?.length - 1].match(/\d+/gu)?.toString() || "";
       }
     });
 
@@ -333,9 +333,9 @@ class PTT {
     article = $("#main-content").text();
     article = article
       .split("--")
-      .slice(0, article.split("--").length - 1)
+      .slice(0, article?.split("--").length - 1)
       .join("--");
-    article = article.split("\n").slice(1).join("\n");
+    article = article?.split("\n").slice(1).join("\n");
     post.article = article;
     //* images
     $("#main-content .richcontent>img").each(function () {
@@ -387,7 +387,7 @@ class PTT {
     const regexp =
       /https?:\/\/(?:[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=]|%[a-fA-F0-9]{2})*\.(?:jpg|jpeg|png|gif|bmp|svg|webp)/gu;
     const matches = [...(content?.matchAll(regexp) || [])];
-    let replaced = content.split(regexp);
+    let replaced = content?.split(regexp);
     let pos = 1;
     let index = 0;
     for (let match of matches) {
