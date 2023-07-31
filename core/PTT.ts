@@ -386,7 +386,7 @@ class PTT {
   ) {
     const regexp =
       /https?:\/\/(?:[a-zA-Z0-9\-._~:/?#[\]@!$&'()*+,;=]|%[a-fA-F0-9]{2})*\.(?:jpg|jpeg|png|gif|bmp|svg|webp)/gu;
-    const matches = [...content.matchAll(regexp)];
+    const matches = [...content?.matchAll(regexp)];
     let replaced = content.split(regexp);
     let pos = 1;
     let index = 0;
