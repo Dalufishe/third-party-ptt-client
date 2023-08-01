@@ -45,7 +45,6 @@ export type Post = {
   time: number;
   board: string;
   article: string;
-  images: string[];
   fromIp: string;
   fromCountry: string;
   edited: string;
@@ -274,7 +273,6 @@ class PTT {
       time: 0,
       board: "",
       article: "",
-      images: [],
       fromIp: "",
       fromCountry: "",
       edited: "",
@@ -337,10 +335,6 @@ class PTT {
       .join("--");
     article = article?.split("\n").slice(1).join("\n");
     post.article = article;
-    //* images
-    $("#main-content .richcontent>img").each(function () {
-      post.images.push($(this).attr("src") || "");
-    });
 
     //* from, fromIp, edited
     const split = $("#main-content").html()?.split("--");

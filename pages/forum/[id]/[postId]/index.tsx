@@ -112,7 +112,8 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                   {img}
                   <Image
                     priority
-                    src={props.post?.images[index]}
+                    src={img}
+                    referrerPolicy="no-referrer"
                     alt={props.post?.title + "的照片"}
                     width={500}
                     height={500}
