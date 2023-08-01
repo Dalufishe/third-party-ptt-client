@@ -3,7 +3,7 @@ import { AiFillSetting, AiFillBug } from "react-icons/ai";
 import { BiSolidHappyAlt, BiCodeAlt } from "react-icons/bi";
 import { cn } from "../../components/@/lib/utils";
 import WhatsNew from "../../components/pages/more-page/WhatsNew/WhatsNew";
-import MoreBox from "../../components/pages/more-page/MoreBox/Morebox";
+import MoreBox from "../../components/pages/more-page/MoreBox/MoreBox";
 
 const Page = () => {
   return (

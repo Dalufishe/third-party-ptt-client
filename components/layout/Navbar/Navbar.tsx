@@ -1,6 +1,6 @@
 import React from "react";
 import { cn } from "../../../utils/cn";
-import { AiOutlineSearch } from "react-icons/ai";
+import { BiHappyAlt } from "react-icons/bi";
 import Link from "next/link";
 
 const Navbar = () => {
@@ -17,7 +17,7 @@ const Navbar = () => {
         <h1 className={cn("text-[#ff6] text-xl font-bold")}>我の批踢踢</h1>
       </Link>
       <div className={cn("text-2xl")}>
-        <AiOutlineSearch />
+        <BiHappyAlt />
       </div>
     </div>
   );
