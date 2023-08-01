@@ -30,18 +30,21 @@ const Page: NextPage<Props> = (props: Props) => {
 
   // post search
   const [keyword, setKeyword] = useState("");
-  const handlePostSearchSubmit = useCallback(async (data: any) => {
-    setKeyword(data.keyword);
-    setCurrentId("1");
-    setFetchNextDataMode("search");
-    const res = await fetch(
-      `/api/searchPosts/?boardName=${props.board.boardName}&keyword=${
-        data.keyword
-      }&page=${1}`
-    );
-    const json = await res.json();
-    setForum(json.data);
-  }, []);
+  const handlePostSearchSubmit = useCallback(
+    async (data: any) => {
+      setKeyword(data.keyword);
+      setCurrentId("1");
+      setFetchNextDataMode("search");
+      const res = await fetch(
+        `/api/searchPosts/?boardName=${props.board.boardName}&keyword=${
+          data.keyword
+        }&page=${1}`
+      );
+      const json = await res.json();
+      setForum(json.data);
+    },
+    [props.board.boardName]
+  );
 
   // infinite scroll
   type fetchNextDataType = "general" | "search";
@@ -68,9 +71,9 @@ const Page: NextPage<Props> = (props: Props) => {
 
   useEffect(() => {
     if (forum?.length < 20) {
-      fetchNextData("general");
+      fetchNextData(fetchNextDataMode);
     }
-  }, [fetchNextData, forum?.length]);
+  }, [forum?.length, fetchNextDataMode]);
 
   // scroll
   const pageRef = useRef(null);

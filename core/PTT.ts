@@ -409,8 +409,7 @@ class PTT {
       html = await data.text();
       $ = cheerio.load(html);
     }
-    console.log(url);
-    console.log(html);
+
     const board: BoardItem[] = [];
 
     // analysize
