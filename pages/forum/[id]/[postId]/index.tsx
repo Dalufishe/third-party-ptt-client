@@ -31,7 +31,7 @@ const convertImage = (w: number, h: number) => `
     </defs>
     <rect width="${w}" height="${h}" fill="#333" />
     <rect id="r" width="${w}" height="${h}" fill="url(#g)" />
-    <animate xlink:href="#r" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="indefinite"  />
+    <animate xlink:hderef="#r" attributeName="x" from="-${w}" to="${w}" dur="1s" repeatCount="infinite"  />
   </svg>`;
 
 const toBase64 = (str: any) =>
@@ -197,7 +197,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   );
   return {
     paths,
-    fallback: true,
+    fallback: "blocking",
   };
 };
 
