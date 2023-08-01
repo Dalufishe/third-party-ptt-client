@@ -380,6 +380,95 @@ class PTT {
 
     return post;
   }
+  static async searchPosts(
+    boardName: string,
+    keyword: string,
+    page?: string
+  ): Promise<Board> {
+    if (page === undefined) page = "1";
+
+    let need18up = false;
+
+    const url = `${this.boardURL}/${boardName}/search?page=${page}&q=${keyword}`;
+    let data = await fetch(url);
+    let html = await data.text();
+    let $ = cheerio.load(html);
+
+    // 若該版需滿 18
+    if ($(".over18-notice").text()) {
+      need18up = true;
+      // 請求第二次
+      const cookies = {
+        over18: "1",
+      };
+      data = await fetch(url, {
+        headers: {
+          Cookie: serializeCookie(cookies),
+        },
+      });
+      html = await data.text();
+      $ = cheerio.load(html);
+    }
+    console.log(url);
+    console.log(html);
+    const board: BoardItem[] = [];
+
+    // analysize
+    $(".r-ent").each(function () {
+      board.push({
+        id: idGenerator(),
+        title: "",
+        href: "",
+        author: "",
+        date: "",
+        rate: 0,
+        level: 0,
+      });
+    });
+
+    $(".title").each(function (index) {
+      // title
+      board[index].title = $(this).text();
+      // href
+      const aTag = $(this).find("a");
+      if (aTag.text()) {
+        const arr = aTag.attr("href")?.split("/");
+        const data = arr?.[arr?.length - 2] + "/" + arr?.[arr?.length - 1];
+        board[index].href = data?.match(/.+(?=\.html)/gu)?.toString() as string;
+      }
+    });
+    $(".author").each(function (index) {
+      board[index].author = $(this).text();
+    });
+    $(".date").each(function (index) {
+      board[index].date = $(this).text();
+    });
+    $(".nrec").each(function (index) {
+      // rate
+      if ($(this).text() === "爆") {
+        board[index].rate = -1;
+      } else {
+        board[index].rate = Number($(this).text());
+      }
+      // level
+      if ($(this).find(".f1").text()) {
+        board[index].level = 1;
+      } else if ($(this).find(".f2").text()) {
+        board[index].level = 2;
+      } else if ($(this).find(".f3").text()) {
+        board[index].level = 3;
+      } else {
+        board[index].level = 4;
+      }
+    });
+
+    return {
+      currentId: page,
+      need18up,
+      data: board,
+      boardName,
+    };
+  }
   static imageReplacer(
     content: string,
     cb: (image: string, index: number) => any

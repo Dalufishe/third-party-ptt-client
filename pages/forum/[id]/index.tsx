@@ -3,14 +3,8 @@ import PTT, { Board, BoardItem } from "../../../core/PTT";
 import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
 import { cn } from "../../../utils/cn";
-import { Input } from "../../../components/@/components/ui/input";
 import Need18Up from "../../../components/layout/Need18Up/Need18Up";
-import {
-  useCallback,
-  useState,
-  useRef,
-  useEffect,
-} from "react";
+import { useCallback, useState, useRef, useEffect } from "react";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import use18 from "../../../hooks/use18";
@@ -18,6 +12,7 @@ import Head from "next/head";
 import useScroll from "../../../hooks/useScroll";
 import getSiteURL from "../../../utils/getSiteURL";
 import { wrapper } from "../../../redux/store";
+import PostSearch from "../../../components/pages/board-page/PostSearch";
 
 type Props = {
   board: Board;
@@ -26,28 +21,56 @@ type Props = {
 const Page: NextPage<Props> = (props: Props) => {
   const router = useRouter();
 
-  // forums
+  // 18
+  const [need18, handleIs18, handleIsNot18] = use18(props.board.need18up);
 
+  // forum (posts)
   const [forum, setForum] = useState(props.board.data);
   const [currentId, setCurrentId] = useState(props.board.currentId);
 
-  const fetchNextData = useCallback(async () => {
+  // post search
+  const [keyword, setKeyword] = useState("");
+  const handlePostSearchSubmit = useCallback(async (data: any) => {
+    setKeyword(data.keyword);
+    setCurrentId("1");
+    setFetchNextDataMode("search");
     const res = await fetch(
-      `/api/getBoard?name=${router.query.id}&id=${Number(currentId) - 1}`
+      `/api/searchPosts/?boardName=${props.board.boardName}&keyword=${
+        data.keyword
+      }&page=${1}`
     );
     const json = await res.json();
-    setForum([...forum, ...json?.data]);
-    setCurrentId(String(Number(currentId) - 1));
-  }, [currentId, forum, router.query.id]);
+    setForum(json.data);
+  }, []);
+
+  // infinite scroll
+  type fetchNextDataType = "general" | "search";
+  const [fetchNextDataMode, setFetchNextDataMode] =
+    useState<fetchNextDataType>("general");
+  const fetchNextData = useCallback(
+    async (type: fetchNextDataType) => {
+      let url = "";
+      if (type === "general") {
+        const nextId = Number(currentId) - 1;
+        url = `/api/getBoard?name=${props.board.boardName}&id=${nextId}`;
+        setCurrentId(String(nextId));
+      } else if (type === "search") {
+        const nextId = Number(currentId) + 1;
+        url = `/api/searchPosts/?boardName=${props.board.boardName}&keyword=${keyword}&page=${nextId}`;
+        setCurrentId(String(nextId));
+      }
+      const res = await fetch(url);
+      const json = await res.json();
+      setForum([...forum, ...json?.data]);
+    },
+    [currentId, forum, router.query.id, keyword]
+  );
 
   useEffect(() => {
     if (forum?.length < 20) {
-      fetchNextData();
+      fetchNextData("general");
     }
   }, [fetchNextData, forum?.length]);
-
-  // 18
-  const [need18, handleIs18, handleIsNot18] = use18(props.board.need18up);
 
   // scroll
   const pageRef = useRef(null);
@@ -68,13 +91,13 @@ const Page: NextPage<Props> = (props: Props) => {
     }
   );
 
-  // fn
-  const handleLink = useCallback((forumItem: BoardItem) => {
+  // post
+  const handleLink = useCallback((post: BoardItem) => {
     if (typeof window !== "undefined") {
-      if (forumItem.href === "") {
+      if (post.href === "") {
         return `/forum/page-delete`;
       }
-      return `/forum/${forumItem.href}`;
+      return `/forum/${post.href}`;
     }
     return "";
   }, []);
@@ -102,27 +125,31 @@ const Page: NextPage<Props> = (props: Props) => {
           id="react-infinite-scroll-component"
           className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}
         >
-          <Input
-            type="text"
-            placeholder={`在 ${props.board.boardName} 版搜尋文章...`}
+          {/* Searchbar */}
+          <div
             className={cn(
-              "h-[48px]",
-              "rounded-none",
               "sticky",
               isTabListHidden ? "top-0" : "top-[-48px]",
               "transition-all"
             )}
-          />
-
+          >
+            <PostSearch
+              placeholder={`在 ${props.board.boardName} 版搜尋文章...`}
+              onSubmit={handlePostSearchSubmit}
+            />
+          </div>
+          {/* Posts */}
           <InfiniteScroll
             scrollableTarget="react-infinite-scroll-component"
             dataLength={forum?.length}
-            next={fetchNextData}
+            next={() => {
+              fetchNextData(fetchNextDataMode);
+            }}
             hasMore={true}
             loader={<div></div>}
           >
-            {forum?.map((forumItem) => (
-              <Link key={forumItem.id} href={handleLink(forumItem)}>
+            {forum?.map((post) => (
+              <Link key={post.id} href={handleLink(post)}>
                 <Card className="rounded-none">
                   <CardContent
                     className={cn(
@@ -141,29 +168,27 @@ const Page: NextPage<Props> = (props: Props) => {
                         <div>
                           <h3
                             className={cn(
-                              forumItem.level === 1 ? "text-red-400" : "",
-                              forumItem.level === 2 ? "text-green-400" : "",
-                              forumItem.level === 3 ? "text-yellow-400" : "",
-                              forumItem.level === 4 ? "text-text1" : "",
+                              post.level === 1 ? "text-red-400" : "",
+                              post.level === 2 ? "text-green-400" : "",
+                              post.level === 3 ? "text-yellow-400" : "",
+                              post.level === 4 ? "text-text1" : "",
                               ""
                             )}
                           >
-                            {forumItem.rate === -1
-                              ? "爆"
-                              : forumItem.rate || ""}
+                            {post.rate === -1 ? "爆" : post.rate || ""}
                           </h3>
                         </div>
                       </div>
                       <div className="flex flex-col flex-1">
-                        <h3>{forumItem.title}</h3>
+                        <h3>{post.title}</h3>
                         <div
                           className={cn(
                             "text-text2 text-sm",
                             "flex justify-between"
                           )}
                         >
-                          <p>{forumItem.author}</p>
-                          <p>{forumItem.date}</p>
+                          <p>{post.author}</p>
+                          <p>{post.date}</p>
                         </div>
                       </div>
                     </div>

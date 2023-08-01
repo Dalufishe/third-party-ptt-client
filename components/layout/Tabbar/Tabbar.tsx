@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { cn } from "../../../utils/cn";
 import {
   AiFillAppstore,
@@ -7,15 +7,17 @@ import {
   AiOutlineSearch,
 } from "react-icons/ai";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const tabs = [
-  { id: 1, icon: <AiOutlineHome />, href: "/" },
-  { id: 2, icon: <AiOutlineSearch />, href: "/" },
-  { id: 3, icon: <AiFillAppstore />, href: "/" },
-  { id: 4, icon: <AiOutlineMenu />, href: "/more" },
+  { id: 1, icon: <AiOutlineHome />, href: "/forum/hot" },
+  { id: 2, icon: <AiOutlineSearch />, href: "/search" },
+  { id: 3, icon: <AiOutlineMenu />, href: "/more" },
 ];
 
 const Tabbar = () => {
+  const router = useRouter();
+  const [active, setActive] = useState(router.pathname);
   return (
     <ul
       className={cn(
@@ -27,13 +29,17 @@ const Tabbar = () => {
     >
       {tabs.map((tab) => (
         <Link
-          href={tab.href}
           key={tab.id}
+          href={tab.href}
+          onClick={() => {
+            setActive(tab.href);
+          }}
           className={cn(
+            active === tab.href ? "text-text3" : "text-text2",
             "p-2",
             "w-full h-full",
             "flex justify-center items-center",
-            "text-2xl text-text2"
+            "text-2xl"
           )}
         >
           {tab.icon}
