@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
-import { cn } from "../../@/lib/utils";
-import { Card } from "../../@/components/ui/card";
+import { cn } from "../../../@/lib/utils";
+import { Card } from "../../../@/components/ui/card";
 import { AiOutlineRight } from "react-icons/ai";
 
 type Props = {

@@ -12,7 +12,7 @@ import Head from "next/head";
 import useScroll from "../../../hooks/useScroll";
 import getSiteURL from "../../../utils/getSiteURL";
 import { wrapper } from "../../../redux/store";
-import PostSearch from "../../../components/pages/board-page/PostSearch";
+import PostSearch from "../../../components/pages/board-page/PostSearch/PostSearch";
 
 type Props = {
   board: Board;
