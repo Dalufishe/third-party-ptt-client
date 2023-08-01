@@ -131,7 +131,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
             className={cn(
               "p-0",
               "flex justify-between items-center gap-0.5",
-              "text-sm text-text3"
+              "text-base text-text2"
             )}
           >
             <div>發送: {props.post?.fromIp}</div>
@@ -147,7 +147,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                   "p-0",
                   "rounded-none",
                   "border-x-0 border-t-0",
-                  "text-sm"
+                  "text-base"
                 )}
               >
                 <div className={cn("px-1 py-3")}>
