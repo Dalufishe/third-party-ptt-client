@@ -39,7 +39,13 @@ const PostSearch = (props: Props) => {
                   {...field}
                   type="text"
                   placeholder={props.placeholder}
-                  className={cn("text-text3", "h-[48px]", "rounded-none")}
+                  autoComplete="off"
+                  className={cn(
+                    "text-text3",
+                    "h-[48px]",
+                    "rounded-none",
+                    "focus-visible:ring-0"
+                  )}
                 />
               </FormControl>
             </FormItem>
