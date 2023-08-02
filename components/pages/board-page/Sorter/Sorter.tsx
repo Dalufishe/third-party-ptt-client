@@ -6,25 +6,26 @@ import {
   AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "../../../@/components/ui/alert-dialog";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "../../../@/components/ui/select";
+import SortItem from "./SortItem/SortItem";
 
-type Props = {};
+type Props = {
+  onConfirm: () => any;
+};
+
+const SortTypeValues = ["不限", "公告", "Re:"];
+const SortOrderValues = ["關聯性", "最新", "最舊"];
+const SortUpdateTimeValues = ["不限時間", "今天", "一周內"];
 
 const Sorter = (props: Props) => {
+  const [SortType, setSortType] = useState(SortTypeValues[0]);
+  const [SortOrder, setSortOrder] = useState(SortOrderValues[0]);
+  const [SortUpdateTime, setSortUpdateTime] = useState(SortUpdateTimeValues[0]);
+
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -45,54 +46,37 @@ const Sorter = (props: Props) => {
           <AlertDialogTitle>看板篩選器</AlertDialogTitle>
         </AlertDialogHeader>
         <div className="flex flex-col gap-2">
-          <div className="flex items-center justify-between">
-            <h3 className="text-text3">類型</h3>
-            <Select>
-              <SelectTrigger className="w-[180px] focus:ring-0">
-                <SelectValue placeholder="不限" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="不限">不限</SelectItem>
-                  <SelectItem value="問卦">問卦</SelectItem>
-                  <SelectItem value="公告">公告</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex items-center justify-between">
-            <h3 className="text-text3">排序依據</h3>
-            <Select>
-              <SelectTrigger className="w-[180px] focus:ring-0">
-                <SelectValue placeholder="關聯性" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="關聯性">關聯性</SelectItem>
-                  <SelectItem value="最新">最新</SelectItem>
-                  <SelectItem value="最舊">最舊</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex items-center justify-between">
-            <h3 className="text-text3">上傳時間</h3>
-            <Select>
-              <SelectTrigger className="w-[180px] focus:ring-0">
-                <SelectValue placeholder="不限時間" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem value="不限時間">不限時間</SelectItem>
-                  <SelectItem value="過去一小時">過去一小時</SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
+          <SortItem
+            title="類型"
+            values={SortTypeValues}
+            onValueChange={(v) => {
+              setSortType(v);
+            }}
+          />
+          <SortItem
+            title="排序依據"
+            values={SortOrderValues}
+            onValueChange={(v) => {
+              setSortOrder(v);
+            }}
+          />
+          <SortItem
+            title="上傳時間"
+            values={SortUpdateTimeValues}
+            onValueChange={(v) => {
+              setSortUpdateTime(v);
+            }}
+          />
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel>取消</AlertDialogCancel>
-          <AlertDialogAction>套用</AlertDialogAction>
+          <AlertDialogAction
+            onClick={() => {
+              props.onConfirm();
+            }}
+          >
+            套用
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

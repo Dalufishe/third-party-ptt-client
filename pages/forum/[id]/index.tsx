@@ -51,6 +51,9 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     [props.board.boardName]
   );
 
+  // sort confirm
+  const handleSortConfirm = useCallback(() => {}, []);
+
   // infinite scroll
   type fetchNextDataType = "general" | "search";
   const [fetchNextDataMode, setFetchNextDataMode] =
@@ -102,13 +105,10 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
 
   // post
   const handleLink = useCallback((post: BoardItem) => {
-    if (typeof window !== "undefined") {
-      if (post.href === "") {
-        return `/forum/page-delete`;
-      }
-      return `/forum/${post.href}`;
+    if (post.href === "") {
+      return `/forum/page-delete`;
     }
-    return "";
+    return `/forum/${post.href}`;
   }, []);
 
   return (
@@ -154,7 +154,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
             <PostSearch
               placeholder={`在 ${props.board.boardName} 版搜尋文章...`}
               onSubmit={handlePostSearchSubmit}
-              right={<Sorter />}
+              right={<Sorter onConfirm={handleSortConfirm} />}
             />
           </div>
           {/* Posts */}
