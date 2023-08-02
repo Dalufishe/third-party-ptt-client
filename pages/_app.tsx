@@ -24,7 +24,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout =
     Component.getLayout || ((page) => <DefaultLayout>{page}</DefaultLayout>);
   return getLayout(
-    <div className="dark">
+    <>
       <Head>
         <meta charSet="utf-8" />
         <meta
@@ -56,7 +56,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           <Analytics />
         </Provider>
       )}
-    </div>
+    </>
   );
 }
 

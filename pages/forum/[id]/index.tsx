@@ -13,12 +13,17 @@ import useScroll from "../../../hooks/useScroll";
 import getSiteURL from "../../../utils/getSiteURL";
 import { wrapper } from "../../../redux/store";
 import PostSearch from "../../../components/pages/board-page/PostSearch/PostSearch";
+import { NextPageWithLayout } from "../../../components/layout/NextPageWithLayout";
+import DefaultLayout from "../../../components/layout/DefaultLayout";
+import Navbar from "../../../components/pages/board-page/Navbar/Navbar";
+import Sorter from "../../../components/pages/board-page/Sorter/Sorter";
 
 type Props = {
   board: Board;
 };
 
-const Page: NextPage<Props> = (props: Props) => {
+const Page: NextPageWithLayout<Props> = (props: Props) => {
+  // router
   const router = useRouter();
 
   // 18
@@ -69,6 +74,7 @@ const Page: NextPage<Props> = (props: Props) => {
     [currentId, forum, router.query.id, keyword]
   );
 
+  // init data fetch
   useEffect(() => {
     if (forum?.length < 20) {
       fetchNextData(fetchNextDataMode);
@@ -120,6 +126,15 @@ const Page: NextPage<Props> = (props: Props) => {
           key="url"
         />
       </Head>
+      {/* replaced Navbar */}
+      <Navbar
+        onClickLeft={() => {
+          router.push("/forum");
+        }}
+      >
+        {props.board.boardName}
+      </Navbar>
+      {/* Main Content */}
       {need18 ? (
         <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />
       ) : (
@@ -139,6 +154,7 @@ const Page: NextPage<Props> = (props: Props) => {
             <PostSearch
               placeholder={`在 ${props.board.boardName} 版搜尋文章...`}
               onSubmit={handlePostSearchSubmit}
+              right={<Sorter />}
             />
           </div>
           {/* Posts */}
@@ -204,6 +220,10 @@ const Page: NextPage<Props> = (props: Props) => {
       )}
     </>
   );
+};
+
+Page.getLayout = function getLayout(page) {
+  return <DefaultLayout noNavbar>{page}</DefaultLayout>;
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
