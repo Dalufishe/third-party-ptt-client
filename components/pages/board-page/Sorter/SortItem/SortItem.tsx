@@ -26,7 +26,9 @@ const SortItem = (props: Props) => {
         <SelectContent>
           <SelectGroup>
             {props.values.map((value) => (
-              <SelectItem value={value}>{value}</SelectItem>
+              <SelectItem key={value} value={value}>
+                {value}
+              </SelectItem>
             ))}
           </SelectGroup>
         </SelectContent>
