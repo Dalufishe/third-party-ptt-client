@@ -12,19 +12,28 @@ import {
   AlertDialogTrigger,
 } from "../../../@/components/ui/alert-dialog";
 import SortItem from "./SortItem/SortItem";
+import _ from "lodash";
+
+export type CurrentSortData = {
+  name: string;
+  data: string;
+}[];
 
 type Props = {
-  onConfirm: () => any;
+  sortData: { name: string; data: string[] }[];
+  defaultSortData: CurrentSortData;
+  onConfirm: (data: CurrentSortData) => any;
 };
 
-const SortTypeValues = ["不限", "公告", "Re:"];
-const SortOrderValues = ["關聯性", "最新", "最舊"];
-const SortUpdateTimeValues = ["不限時間", "今天", "一周內"];
-
 const Sorter = (props: Props) => {
-  const [SortType, setSortType] = useState(SortTypeValues[0]);
-  const [SortOrder, setSortOrder] = useState(SortOrderValues[0]);
-  const [SortUpdateTime, setSortUpdateTime] = useState(SortUpdateTimeValues[0]);
+  const [currentSortData, setCurrentSortData] = useState(
+    props.sortData.map((item) => {
+      return {
+        name: item.name,
+        data: item.data[0],
+      };
+    })
+  );
 
   return (
     <AlertDialog>
@@ -46,33 +55,36 @@ const Sorter = (props: Props) => {
           <AlertDialogTitle>看板篩選器</AlertDialogTitle>
         </AlertDialogHeader>
         <div className="flex flex-col gap-2">
-          <SortItem
-            title="類型"
-            values={SortTypeValues}
-            onValueChange={(v) => {
-              setSortType(v);
-            }}
-          />
-          <SortItem
-            title="排序依據"
-            values={SortOrderValues}
-            onValueChange={(v) => {
-              setSortOrder(v);
-            }}
-          />
-          <SortItem
-            title="上傳時間"
-            values={SortUpdateTimeValues}
-            onValueChange={(v) => {
-              setSortUpdateTime(v);
-            }}
-          />
+          {currentSortData.map((item) => (
+            <SortItem
+              key={item.name}
+              title={item.name}
+              values={
+                props.sortData.filter((f) => f.name === item.name)[0].data
+              }
+              placeholder={
+                props.defaultSortData.filter((f) => f.name === item.name)[0]
+                  .data
+              }
+              onValueChange={(v) => {
+                setCurrentSortData(
+                  currentSortData.map((data) => {
+                    if (data.name === item.name) {
+                      return { name: item.name, data: v };
+                    } else {
+                      return data;
+                    }
+                  })
+                );
+              }}
+            />
+          ))}
         </div>
         <AlertDialogFooter>
           <AlertDialogCancel>取消</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
-              props.onConfirm();
+              props.onConfirm(currentSortData);
             }}
           >
             套用

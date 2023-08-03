@@ -4,7 +4,7 @@ import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
 import { cn } from "../../../utils/cn";
 import Need18Up from "../../../components/layout/Need18Up/Need18Up";
-import { useCallback, useState, useRef, useEffect } from "react";
+import { useCallback, useState, useRef, useEffect, useMemo } from "react";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import use18 from "../../../hooks/use18";
@@ -16,7 +16,9 @@ import PostSearch from "../../../components/pages/board-page/PostSearch/PostSear
 import { NextPageWithLayout } from "../../../components/layout/NextPageWithLayout";
 import DefaultLayout from "../../../components/layout/DefaultLayout";
 import Navbar from "../../../components/pages/board-page/Navbar/Navbar";
-import Sorter from "../../../components/pages/board-page/Sorter/Sorter";
+import Sorter, {
+  CurrentSortData,
+} from "../../../components/pages/board-page/Sorter/Sorter";
 
 type Props = {
   board: Board;
@@ -25,11 +27,10 @@ type Props = {
 const Page: NextPageWithLayout<Props> = (props: Props) => {
   // router
   const router = useRouter();
-
   // 18
   const [need18, handleIs18, handleIsNot18] = use18(props.board.need18up);
 
-  // forum (posts)
+  //* forum (posts)
   const [forum, setForum] = useState(props.board.data);
   const [currentId, setCurrentId] = useState(props.board.currentId);
 
@@ -51,13 +52,35 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     [props.board.boardName]
   );
 
-  // sort confirm
-  const handleSortConfirm = useCallback(() => {}, []);
+  // sorter
+  const sortData = useMemo(
+    () => [
+      { name: "類型", data: ["不限", "公告","Re:"] },
+      { name: "排序依據", data: ["關聯性", "最新", "最舊"] },
+      { name: "發文時間", data: ["不限時間", "今天", "一周內"] },
+    ],
+    []
+  );
+  const [defaultSortData, setDefaultSortData] = useState<CurrentSortData>(
+    sortData.map((item) => {
+      return { name: item.name, data: item.data[0] };
+    })
+  );
+  const handleSortConfirm = useCallback((data: CurrentSortData) => {
+    setDefaultSortData(data);
+    for (let d of data) {
+      if (d.name === "類型") {
+        handlePostSearchSubmit({ keyword: d.data });
+      }
+    }
+  }, []);
 
   // infinite scroll
   type fetchNextDataType = "general" | "search";
+
   const [fetchNextDataMode, setFetchNextDataMode] =
     useState<fetchNextDataType>("general");
+
   const fetchNextData = useCallback(
     async (type: fetchNextDataType) => {
       let url = "";
@@ -154,7 +177,13 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
             <PostSearch
               placeholder={`在 ${props.board.boardName} 版搜尋文章...`}
               onSubmit={handlePostSearchSubmit}
-              right={<Sorter onConfirm={handleSortConfirm} />}
+              right={
+                <Sorter
+                  sortData={sortData}
+                  defaultSortData={defaultSortData}
+                  onConfirm={handleSortConfirm}
+                />
+              }
             />
           </div>
           {/* Posts */}

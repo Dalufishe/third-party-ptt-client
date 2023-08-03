@@ -19,7 +19,10 @@ const SortItem = (props: Props) => {
   return (
     <div className="flex items-center justify-between">
       <h3 className="text-text3">{props.title}</h3>
-      <Select onValueChange={props.onValueChange}>
+      <Select
+        onValueChange={props.onValueChange}
+        defaultValue={props.placeholder}
+      >
         <SelectTrigger className="w-[180px] focus:ring-0">
           <SelectValue placeholder={props.placeholder || props.values[0]} />
         </SelectTrigger>
