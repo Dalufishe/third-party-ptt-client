@@ -52,29 +52,6 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     [props.board.boardName]
   );
 
-  // sorter
-  const sortData = useMemo(
-    () => [
-      { name: "類型", data: ["不限", "公告","Re:"] },
-      { name: "排序依據", data: ["關聯性", "最新", "最舊"] },
-      { name: "發文時間", data: ["不限時間", "今天", "一周內"] },
-    ],
-    []
-  );
-  const [defaultSortData, setDefaultSortData] = useState<CurrentSortData>(
-    sortData.map((item) => {
-      return { name: item.name, data: item.data[0] };
-    })
-  );
-  const handleSortConfirm = useCallback((data: CurrentSortData) => {
-    setDefaultSortData(data);
-    for (let d of data) {
-      if (d.name === "類型") {
-        handlePostSearchSubmit({ keyword: d.data });
-      }
-    }
-  }, []);
-
   // infinite scroll
   type fetchNextDataType = "general" | "search";
 
@@ -106,6 +83,42 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
       fetchNextData(fetchNextDataMode);
     }
   }, [forum?.length, fetchNextDataMode]);
+
+  const restartPage = useCallback(() => {
+    setCurrentId(String(Number(props.board.currentId) + 2));
+    setFetchNextDataMode("general");
+    setForum([]);
+  }, []);
+
+  // sorter
+  const sortData = useMemo(
+    () => [
+      { name: "類型", data: ["不限", "公告", "Re:"] },
+      { name: "排序依據", data: ["關聯性", "最新", "最舊"] },
+      { name: "發文時間", data: ["不限時間", "今天", "一周內"] },
+    ],
+    []
+  );
+  const [defaultSortData, setDefaultSortData] = useState<CurrentSortData>(
+    sortData.map((item) => {
+      return { name: item.name, data: item.data[0] };
+    })
+  );
+
+  const handleSortConfirm = useCallback((data: CurrentSortData) => {
+    setDefaultSortData(data);
+    for (let d of data) {
+      if (d.name === "類型") {
+        if (d.data === "不限") {
+          restartPage();
+        } else if (d.data === "Re:") {
+          handlePostSearchSubmit({ keyword: d.data });
+        } else {
+          handlePostSearchSubmit({ keyword: "[" + d.data + "]" });
+        }
+      }
+    }
+  }, []);
 
   // scroll
   const pageRef = useRef(null);
