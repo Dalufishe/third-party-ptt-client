@@ -10,7 +10,13 @@ import {
 import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
 import useScroll from "../../../hooks/useScroll";
-import { useEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { useRouter } from "next/router";
 import useScrollMemo from "../../../hooks/useScrollMemo";
 import Head from "next/head";
@@ -18,6 +24,9 @@ import IsBottom from "../../../components/layout/IsBottom/IsBottom";
 import getSiteURL from "../../../utils/getSiteURL";
 import { wrapper } from "../../../redux/store";
 import PullToRefresh from "react-simple-pull-to-refresh";
+import { useDispatch, useSelector } from "react-redux";
+import set_scroll_position from "../../../redux/actions/set_scroll_position";
+import set_hot_board_from_redux from "../../../redux/actions/set_hot_board";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -29,8 +38,22 @@ type Props = {
 };
 
 const Page: NextPage<Props> = (props: Props) => {
-  // router
   const router = useRouter();
+  const dispatch = useDispatch();
+
+  //* hot_board
+
+  const [hot_board, set_hot_board] = useState<HotBoard[]>([]);
+  const hot_board_from_redux = useSelector((state: any) => state.hot_board);
+
+  useEffect(() => {
+    if (hot_board_from_redux.length === 0) {
+      set_hot_board(props.forums);
+      dispatch(set_hot_board_from_redux(props.forums));
+    } else {
+      set_hot_board(hot_board_from_redux);
+    }
+  }, []);
 
   //* scroll
 
@@ -60,7 +83,23 @@ const Page: NextPage<Props> = (props: Props) => {
   };
 
   // scroll height memo
+  const scroll_position = useSelector(
+    (state: any) => state?.scroll_position?.queue
+  );
+
+  useLayoutEffect(() => {
+    const scrollMemo = scroll_position[0];
+    if (scrollMemo && pageEl) {
+      pageEl.scrollTo({ top: scrollMemo });
+      dispatch(set_scroll_position([]));
+    }
+  }, [pageEl]);
+
   const scrollTop = useScrollMemo(pageEl);
+
+  const handleNextPage = useCallback(() => {
+    dispatch(set_scroll_position([...scroll_position, scrollTop]));
+  }, [scrollTop]);
 
   return (
     <div
@@ -112,8 +151,12 @@ const Page: NextPage<Props> = (props: Props) => {
                 onRefresh={handleScrollRefresh}
               >
                 <TabsContent value={forumType.name} className="mt-0">
-                  {props.forums.map((forum) => (
-                    <Link key={forum.id} href={forum.boardHref}>
+                  {hot_board.map((forum) => (
+                    <Link
+                      key={forum.id}
+                      href={forum.boardHref}
+                      onClick={handleNextPage}
+                    >
                       <Card className="rounded-none">
                         <CardContent
                           className={cn(

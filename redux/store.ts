@@ -9,7 +9,16 @@ import storage from "redux-persist/lib/storage";
 
 // reducers
 import is18 from "./reducers/is18.rdc";
-const reducer = combineReducers({ is18 });
+import scroll_position from "./reducers/scroll_position.rdc";
+import hot_board from "./reducers/hot_board";
+import board_data from "./reducers/board_data";
+
+const reducer = combineReducers({
+  is18,
+  scroll_position,
+  hot_board,
+  board_data,
+});
 
 // persist
 const persistConfig = {

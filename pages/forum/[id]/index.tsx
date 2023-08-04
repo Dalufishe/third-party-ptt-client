@@ -4,7 +4,14 @@ import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
 import { cn } from "../../../utils/cn";
 import Need18Up from "../../../components/layout/Need18Up/Need18Up";
-import { useCallback, useState, useRef, useEffect, useMemo } from "react";
+import {
+  useCallback,
+  useState,
+  useRef,
+  useEffect,
+  useMemo,
+  useLayoutEffect,
+} from "react";
 import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import use18 from "../../../hooks/use18";
@@ -19,19 +26,40 @@ import Navbar from "../../../components/pages/board-page/Navbar/Navbar";
 import Sorter, {
   CurrentSortData,
 } from "../../../components/pages/board-page/Sorter/Sorter";
+import useScrollMemo from "../../../hooks/useScrollMemo";
+import { useDispatch, useSelector } from "react-redux";
+import set_scroll_position from "../../../redux/actions/set_scroll_position";
+import set_board_data_from_redux from "../../../redux/actions/set_board_data";
 
 type Props = {
   board: Board;
 };
 
 const Page: NextPageWithLayout<Props> = (props: Props) => {
-  // router
+  const dispatch = useDispatch();
   const router = useRouter();
+
   // 18
   const [need18, handleIs18, handleIsNot18] = use18(props.board.need18up);
 
-  //* forum (posts)
-  const [forum, setForum] = useState(props.board.data);
+  //* board data
+
+  const [board_data, set_board_data] = useState<any>();
+  const board_data_from_redux = useSelector(
+    (state: any) => state.board_data?.[props.board.boardName]
+  );
+
+  useEffect(() => {
+    if (typeof board_data_from_redux === "undefined") {
+      set_board_data(props.board.data);
+      dispatch(
+        set_board_data_from_redux(props.board.boardName, props.board.data)
+      );
+    } else {
+      set_board_data(board_data_from_redux);
+    }
+  }, []);
+
   const [currentId, setCurrentId] = useState(props.board.currentId);
 
   // post search
@@ -47,7 +75,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         }&page=${1}`
       );
       const json = await res.json();
-      setForum(json.data);
+      set_board_data(json.data);
     },
     [props.board.boardName]
   );
@@ -72,22 +100,29 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
       }
       const res = await fetch(url);
       const json = await res.json();
-      setForum([...forum, ...json?.data]);
+      set_board_data([...board_data, ...json?.data]);
+      dispatch(
+        set_board_data_from_redux(props.board.boardName, [
+          ...board_data,
+          ...json?.data,
+        ])
+      );
     },
-    [currentId, forum, router.query.id, keyword]
+    [currentId, board_data, router.query.id, keyword]
   );
 
   // init data fetch
+
   useEffect(() => {
-    if (forum?.length < 20) {
+    if (board_data?.length != 0 && board_data?.length < 20) {
       fetchNextData(fetchNextDataMode);
     }
-  }, [forum?.length, fetchNextDataMode]);
+  }, [board_data?.length, fetchNextDataMode]);
 
   const restartPage = useCallback(() => {
     setCurrentId(String(Number(props.board.currentId) + 2));
     setFetchNextDataMode("general");
-    setForum([]);
+    set_board_data([]);
   }, []);
 
   // sorter
@@ -120,14 +155,19 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     }
   }, []);
 
-  // scroll
+  //* scroll
+
+  // el
+
   const pageRef = useRef(null);
-  const [pageEl, setPageEl] = useState(pageRef.current);
+  const [pageEl, setPageEl] = useState<any>(pageRef.current);
   const [isTabListHidden, setTabListHiddden] = useState(false);
 
   useEffect(() => {
     setPageEl(pageRef.current);
   }, []);
+
+  // tabs behavior
 
   useScroll(
     pageEl,
@@ -139,7 +179,29 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     }
   );
 
-  // post
+  // scroll position
+
+  const scroll_position = useSelector(
+    (state: any) => state?.scroll_position?.queue
+  );
+
+  useLayoutEffect(() => {
+    const scrollMemo = scroll_position[1];
+    
+    if (scrollMemo && pageEl) {
+      pageEl.scrollTo({ top: scrollMemo });
+      dispatch(set_scroll_position([scroll_position[0]]));
+    }
+  }, [pageEl]);
+
+  const scrollTop = useScrollMemo(pageEl);
+
+  // next page
+
+  const handleNextPage = useCallback(() => {
+    dispatch(set_scroll_position([...scroll_position, scrollTop]));
+  }, [scrollTop, board_data]);
+
   const handleLink = useCallback((post: BoardItem) => {
     if (post.href === "") {
       return `/forum/page-delete`;
@@ -202,15 +264,19 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           {/* Posts */}
           <InfiniteScroll
             scrollableTarget="react-infinite-scroll-component"
-            dataLength={forum?.length}
+            dataLength={board_data?.length || 0}
             next={() => {
               fetchNextData(fetchNextDataMode);
             }}
             hasMore={true}
             loader={<div></div>}
           >
-            {forum?.map((post) => (
-              <Link key={post.id} href={handleLink(post)}>
+            {board_data?.map((post: any) => (
+              <Link
+                key={post.id}
+                href={handleLink(post)}
+                onClick={handleNextPage}
+              >
                 <Card className="rounded-none">
                   <CardContent
                     className={cn(

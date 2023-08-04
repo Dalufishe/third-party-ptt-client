@@ -48,6 +48,8 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   // 18
   const [need18, handleIs18, handleIsNot18] = use18(props.post?.need18up);
 
+  
+
   return need18 ? (
     <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />
   ) : (
