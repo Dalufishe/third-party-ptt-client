@@ -1,14 +1,16 @@
 import { Action } from "../types/Action";
 
+type State = { queue: number[] };
+
 const scroll_position = (
-  prevSate = {
-    quene:[]
+  prevSate: State = {
+    queue: [],
   },
   action: Action
 ) => {
-  let newState = prevSate;
+  let newState = { ...prevSate };
   if (action.type === "set_scroll_position") {
-    newState = action.payload;
+    newState.queue = [...action.payload];
     return newState;
   } else {
     return prevSate;

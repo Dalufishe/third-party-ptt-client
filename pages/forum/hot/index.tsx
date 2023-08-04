@@ -107,12 +107,11 @@ const Page: NextPage<Props> = (props: Props) => {
         {forumsType.map((forumType) => {
           if (forumType.name === "熱門看板") {
             return (
-              <PullToRefresh onRefresh={handleScrollRefresh}>
-                <TabsContent
-                  key={forumType.name}
-                  value={forumType.name}
-                  className="mt-0"
-                >
+              <PullToRefresh
+                key={forumType.name}
+                onRefresh={handleScrollRefresh}
+              >
+                <TabsContent value={forumType.name} className="mt-0">
                   {props.forums.map((forum) => (
                     <Link key={forum.id} href={forum.boardHref}>
                       <Card className="rounded-none">
