@@ -28,6 +28,10 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       <Head>
         <meta charSet="utf-8" />
         <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover"
+        />
+        <meta
           name="description"
           content="全新的 PTT 批踢踢第三方客戶端，快速、簡潔。"
         />
