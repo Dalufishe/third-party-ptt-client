@@ -14,6 +14,7 @@ import Head from "next/head";
 import IsBottom from "../../../components/layout/IsBottom/IsBottom";
 import getSiteURL from "../../../utils/getSiteURL";
 import { wrapper } from "../../../redux/store";
+import PTR from "../../../components/global/PTR/PTR";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -55,36 +56,34 @@ const Page: NextPage<Props> = (props: Props) => {
         {forumsType.map((forumType) => {
           if (forumType.name === "分類看板") {
             return (
-              <TabsContent
-                key={forumType.name}
-                value={forumType.name}
-                className="mt-0"
-              >
-                {props.groups?.map((forum) => (
-                  <Link key={forum.id} href={forum.boardHref}>
-                    <Card className="rounded-none">
-                      <CardContent
-                        className={cn(
-                          "bg-primary",
-                          "flex flex-col justify-between",
-                          "p-2"
-                        )}
-                      >
-                        <div className="flex justify-between">
-                          <div className="flex">
-                            <h3>{forum.boardName}</h3>
+              <PTR key={forumType.name}>
+                <TabsContent value={forumType.name} className="mt-0">
+                  {props.groups?.map((forum) => (
+                    <Link key={forum.id} href={forum.boardHref}>
+                      <Card className="rounded-none">
+                        <CardContent
+                          className={cn(
+                            "bg-primary",
+                            "flex flex-col justify-between",
+                            "p-2"
+                          )}
+                        >
+                          <div className="flex justify-between">
+                            <div className="flex">
+                              <h3>{forum.boardName}</h3>
+                            </div>
+                            <div></div>
                           </div>
-                          <div></div>
-                        </div>
-                        <div className="text-text2 text-sm">
-                          {forum.boardTitle}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-                <IsBottom />
-              </TabsContent>
+                          <div className="text-text2 text-sm">
+                            {forum.boardTitle}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </Link>
+                  ))}
+                  <IsBottom />
+                </TabsContent>
+              </PTR>
             );
           }
         })}

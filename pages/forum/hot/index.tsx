@@ -27,6 +27,7 @@ import PullToRefresh from "react-simple-pull-to-refresh";
 import { useDispatch, useSelector } from "react-redux";
 import set_scroll_position from "../../../redux/actions/set_scroll_position";
 import set_hot_board_from_redux from "../../../redux/actions/set_hot_board";
+import PTR from "../../../components/global/PTR/PTR";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -76,11 +77,6 @@ const Page: NextPage<Props> = (props: Props) => {
       setTabListHiddden(false);
     }
   );
-
-  // srcoll pull refresh
-  const handleScrollRefresh = async () => {
-    router.reload();
-  };
 
   // scroll height memo
   const scroll_position = useSelector(
@@ -145,10 +141,7 @@ const Page: NextPage<Props> = (props: Props) => {
         {forumsType.map((forumType) => {
           if (forumType.name === "熱門看板") {
             return (
-              <PullToRefresh
-                key={forumType.name}
-                onRefresh={handleScrollRefresh}
-              >
+              <PTR key={forumType.name}>
                 <TabsContent value={forumType.name} className="mt-0">
                   {hot_board.map((forum) => (
                     <Link
@@ -194,7 +187,7 @@ const Page: NextPage<Props> = (props: Props) => {
                   ))}
                   <IsBottom />
                 </TabsContent>
-              </PullToRefresh>
+              </PTR>
             );
           }
         })}

@@ -31,6 +31,7 @@ import { useDispatch, useSelector } from "react-redux";
 import set_scroll_position from "../../../redux/actions/set_scroll_position";
 import set_board_data_from_redux from "../../../redux/actions/set_board_data";
 import BoardMenu from "../../../components/pages/board-page/BoardMenu/BoardMenu";
+import PTR from "../../../components/global/PTR/PTR";
 
 type Props = {
   board: Board;
@@ -293,58 +294,60 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
             hasMore={true}
             loader={<div></div>}
           >
-            {board_data?.map((post: any) => (
-              <Link
-                key={post.id}
-                href={handleLink(post)}
-                onClick={handleNextPage}
-              >
-                <Card className="rounded-none">
-                  <CardContent
-                    className={cn(
-                      "bg-primary",
-                      "flex flex-col justify-between",
-                      "p-2 pl-0 pr-6"
-                    )}
-                  >
-                    <div className="flex items-center">
-                      <div
-                        className={cn(
-                          "w-10",
-                          "flex items-center justify-center"
-                        )}
-                      >
-                        <div>
-                          <h3
-                            className={cn(
-                              post.level === 1 ? "text-red-400" : "",
-                              post.level === 2 ? "text-green-400" : "",
-                              post.level === 3 ? "text-yellow-400" : "",
-                              post.level === 4 ? "text-text1" : "",
-                              ""
-                            )}
-                          >
-                            {post.rate === -1 ? "爆" : post.rate || ""}
-                          </h3>
-                        </div>
-                      </div>
-                      <div className="flex flex-col flex-1">
-                        <h3>{post.title}</h3>
+            <PTR>
+              {board_data?.map((post: any) => (
+                <Link
+                  key={post.id}
+                  href={handleLink(post)}
+                  onClick={handleNextPage}
+                >
+                  <Card className="rounded-none">
+                    <CardContent
+                      className={cn(
+                        "bg-primary",
+                        "flex flex-col justify-between",
+                        "p-2 pl-0 pr-6"
+                      )}
+                    >
+                      <div className="flex items-center">
                         <div
                           className={cn(
-                            "text-text2 text-sm",
-                            "flex justify-between"
+                            "w-10",
+                            "flex items-center justify-center"
                           )}
                         >
-                          <p>{post.author}</p>
-                          <p>{post.date}</p>
+                          <div>
+                            <h3
+                              className={cn(
+                                post.level === 1 ? "text-red-400" : "",
+                                post.level === 2 ? "text-green-400" : "",
+                                post.level === 3 ? "text-yellow-400" : "",
+                                post.level === 4 ? "text-text1" : "",
+                                ""
+                              )}
+                            >
+                              {post.rate === -1 ? "爆" : post.rate || ""}
+                            </h3>
+                          </div>
+                        </div>
+                        <div className="flex flex-col flex-1">
+                          <h3>{post.title}</h3>
+                          <div
+                            className={cn(
+                              "text-text2 text-sm",
+                              "flex justify-between"
+                            )}
+                          >
+                            <p>{post.author}</p>
+                            <p>{post.date}</p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </PTR>
           </InfiniteScroll>
         </div>
       )}
