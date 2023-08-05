@@ -15,7 +15,7 @@ const Navbar = (props: Props) => {
       className={cn(
         "h-[48px] bg-brand",
         "flex justify-between items-center",
-        "px-3"
+        "px-4"
       )}
     >
       <div onClick={props.onClickLeft}>

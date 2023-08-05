@@ -1,6 +1,7 @@
 import * as cheerio from "cheerio";
 import serializeCookie from "../utils/serializeCookie";
 import idGenerator from "../utils/idGenerator";
+import { type } from "os";
 
 export type HotBoard = {
   id: string;
@@ -57,10 +58,16 @@ export type Post = {
   }[];
 };
 
+export type BoardMan = {
+  content: string;
+  href: string;
+}[];
+
 class PTT {
   static hotBoardsURL = "https://www.ptt.cc/bbs/hotboards.html";
   static groupBoardsURL = "https://www.ptt.cc/cls";
   static boardURL = "https://www.ptt.cc/bbs";
+  static boardManURL = "https://www.ptt.cc/man";
 
   static async getHotBoards(): Promise<HotBoard[]> {
     const data = await fetch(this.hotBoardsURL);
@@ -164,7 +171,7 @@ class PTT {
     name: string = "Gossiping",
     id: string = ""
   ): Promise<Board> {
-    const url = `${this.boardURL}/${name}/index${id}.html`;
+    let url = `${this.boardURL}/${name}/index${id}.html`;
     let need18up = false;
     let currentId = "";
 
@@ -249,6 +256,7 @@ class PTT {
         board[index].level = 4;
       }
     });
+
     return {
       currentId,
       need18up,
@@ -373,6 +381,49 @@ class PTT {
     post.comments = post.comments.slice(1);
 
     return post;
+  }
+  static async getBoardMan(
+    boardName: string,
+    page: string = ""
+  ): Promise<BoardMan> {
+    // 請求精華區
+    const url = `${this.boardManURL}/${boardName}/${page}/index.html`;
+
+    // 請求第一次
+    let data = await fetch(url, {});
+    let html = await data.text();
+
+    let $ = cheerio.load(html);
+
+    // 若該版需滿 18
+    if ($(".over18-notice").text()) {
+      // 請求第二次
+      const cookies = {
+        over18: "1",
+      };
+      data = await fetch(url, {
+        headers: {
+          Cookie: serializeCookie(cookies),
+        },
+      });
+      html = await data.text();
+      $ = cheerio.load(html);
+    }
+
+    const boardMan: BoardMan = [];
+    $(".m-ent").each(function (index) {
+      const content = $(this).find(".title").text();
+      const href =
+        $(this)
+          .find(".title>a")
+          .attr("href")
+          ?.match(`/(?<=${boardName}\/).+(?=\/index.html)/`)
+          ?.toString() || "";
+
+      boardMan.push({ content, href });
+    });
+
+    return boardMan;
   }
   static async searchPosts(
     boardName: string,

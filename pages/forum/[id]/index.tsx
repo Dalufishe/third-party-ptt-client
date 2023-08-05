@@ -1,5 +1,5 @@
 import { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import PTT, { Board, BoardItem } from "../../../core/PTT";
+import PTT, { Board, BoardItem, BoardMan } from "../../../core/PTT";
 import { Card, CardContent } from "../../../components/@/components/ui/card";
 import Link from "next/link";
 import { cn } from "../../../utils/cn";
@@ -30,9 +30,11 @@ import useScrollMemo from "../../../hooks/useScrollMemo";
 import { useDispatch, useSelector } from "react-redux";
 import set_scroll_position from "../../../redux/actions/set_scroll_position";
 import set_board_data_from_redux from "../../../redux/actions/set_board_data";
+import BoardMenu from "../../../components/pages/board-page/BoardMenu/BoardMenu";
 
 type Props = {
   board: Board;
+  boardMan: BoardMan;
 };
 
 const Page: NextPageWithLayout<Props> = (props: Props) => {
@@ -42,64 +44,80 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   // 18
   const [need18, handleIs18, handleIsNot18] = use18(props.board.need18up);
 
-  //* board data
+  //* 看板資料
 
   const [board_data, set_board_data] = useState<any>();
   const board_data_from_redux = useSelector(
     (state: any) => state.board_data?.[props.board.boardName]
   );
 
+  // 進入頁面時
   useEffect(() => {
+    // 若 redux 中沒有資料
     if (typeof board_data_from_redux === "undefined") {
+      // 使用後端資料
       set_board_data(props.board.data);
+      // 設置 redux
       dispatch(
         set_board_data_from_redux(props.board.boardName, props.board.data)
       );
     } else {
+      // 使用 redux 資料
       set_board_data(board_data_from_redux);
     }
   }, []);
 
+  // 數據段 (用於無限加載 & 重整定位)
   const [currentId, setCurrentId] = useState(props.board.currentId);
 
-  // post search
+  //* 文章搜尋
+
   const [keyword, setKeyword] = useState("");
+
   const handlePostSearchSubmit = useCallback(
     async (data: any) => {
       setKeyword(data.keyword);
       setCurrentId("1");
       setFetchNextDataMode("search");
-      const res = await fetch(
-        `/api/searchPosts/?boardName=${props.board.boardName}&keyword=${
-          data.keyword
-        }&page=${1}`
-      );
+      const url = `/api/searchPosts/?boardName=${
+        props.board.boardName
+      }&keyword=${data.keyword}&page=${1}`;
+      const res = await fetch(url);
       const json = await res.json();
       set_board_data(json.data);
     },
     [props.board.boardName]
   );
 
-  // infinite scroll
+  //* 無限加載
+
+  // 滾動模式
   type fetchNextDataType = "general" | "search";
 
+  // 預設: 一般模式
   const [fetchNextDataMode, setFetchNextDataMode] =
     useState<fetchNextDataType>("general");
 
   const fetchNextData = useCallback(
     async (type: fetchNextDataType) => {
       let url = "";
+      // 一般模式下
       if (type === "general") {
         const nextId = Number(currentId) - 1;
         url = `/api/getBoard?name=${props.board.boardName}&id=${nextId}`;
         setCurrentId(String(nextId));
-      } else if (type === "search") {
+      }
+      // 查詢模式下
+      else if (type === "search") {
         const nextId = Number(currentId) + 1;
         url = `/api/searchPosts/?boardName=${props.board.boardName}&keyword=${keyword}&page=${nextId}`;
         setCurrentId(String(nextId));
       }
+      // 獲取資料
       const res = await fetch(url);
       const json = await res.json();
+
+      // 設置資料
       set_board_data([...board_data, ...json?.data]);
       dispatch(
         set_board_data_from_redux(props.board.boardName, [
@@ -111,7 +129,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     [currentId, board_data, router.query.id, keyword]
   );
 
-  // init data fetch
+  //* 特殊情況下的初始資料補全
 
   useEffect(() => {
     if (board_data?.length != 0 && board_data?.length < 20) {
@@ -122,10 +140,10 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   const restartPage = useCallback(() => {
     setCurrentId(String(Number(props.board.currentId) + 2));
     setFetchNextDataMode("general");
-    set_board_data([]);
+    set_board_data(["PLACE_HOLDER"]);
   }, []);
 
-  // sorter
+  //* 過濾篩選器
   const sortData = useMemo(
     () => [
       { name: "類型", data: ["不限", "公告", "Re:"] },
@@ -134,6 +152,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     ],
     []
   );
+
   const [defaultSortData, setDefaultSortData] = useState<CurrentSortData>(
     sortData.map((item) => {
       return { name: item.name, data: item.data[0] };
@@ -155,10 +174,9 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     }
   }, []);
 
-  //* scroll
+  //* 滾動效果 (記憶, 選單隱藏)
 
-  // el
-
+  // element
   const pageRef = useRef(null);
   const [pageEl, setPageEl] = useState<any>(pageRef.current);
   const [isTabListHidden, setTabListHiddden] = useState(false);
@@ -168,7 +186,6 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   }, []);
 
   // tabs behavior
-
   useScroll(
     pageEl,
     () => {
@@ -180,14 +197,13 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   );
 
   // scroll position
-
   const scroll_position = useSelector(
     (state: any) => state?.scroll_position?.queue
   );
 
   useLayoutEffect(() => {
     const scrollMemo = scroll_position[1];
-    
+
     if (scrollMemo && pageEl) {
       pageEl.scrollTo({ top: scrollMemo });
       dispatch(set_scroll_position([scroll_position[0]]));
@@ -196,7 +212,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
 
   const scrollTop = useScrollMemo(pageEl);
 
-  // next page
+  //* 前往下一頁 (文章)
 
   const handleNextPage = useCallback(() => {
     dispatch(set_scroll_position([...scroll_position, scrollTop]));
@@ -229,6 +245,12 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         onClickLeft={() => {
           router.push("/forum");
         }}
+        right={
+          <BoardMenu
+            boardMan={props.boardMan}
+            boardName={props.board.boardName}
+          />
+        }
       >
         {props.board.boardName}
       </Navbar>
@@ -347,10 +369,12 @@ export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
   () => async (context) => {
     const forumId = context.params?.id as string;
     const board = await PTT.getBoard(forumId);
+    const boardMan = await PTT.getBoardMan(forumId);
 
     return {
       props: {
         board,
+        boardMan,
       },
       revalidate: 3,
     };

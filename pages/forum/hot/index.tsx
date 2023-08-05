@@ -59,7 +59,7 @@ const Page: NextPage<Props> = (props: Props) => {
 
   const pageRef = useRef(null);
   const [pageEl, setPageEl] = useState<any>(pageRef.current);
-  const [isTabListHidden, setTabListHiddden] = useState(false);
+  const [isTabListHidden, setTabListHiddden] = useState(true);
 
   useEffect(() => {
     setPageEl(pageRef.current);
@@ -70,10 +70,10 @@ const Page: NextPage<Props> = (props: Props) => {
   useScroll(
     pageEl,
     () => {
-      setTabListHiddden(false);
+      setTabListHiddden(true);
     },
     () => {
-      setTabListHiddden(true);
+      setTabListHiddden(false);
     }
   );
 
@@ -86,7 +86,6 @@ const Page: NextPage<Props> = (props: Props) => {
   const scroll_position = useSelector(
     (state: any) => state?.scroll_position?.queue
   );
-
   useLayoutEffect(() => {
     const scrollMemo = scroll_position[0];
     if (scrollMemo && pageEl) {
@@ -125,7 +124,7 @@ const Page: NextPage<Props> = (props: Props) => {
             "z-50",
             "w-full rounded-none",
             "sticky",
-            isTabListHidden ? "top-0" : "top-[-40px]",
+            isTabListHidden ? "top-[-40px]" : "top-0",
             "transition-all"
           )}
         >
