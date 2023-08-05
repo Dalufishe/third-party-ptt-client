@@ -20,6 +20,7 @@ import IsBottom from "../../../../components/layout/IsBottom/IsBottom";
 import getSiteURL from "../../../../utils/getSiteURL";
 import { wrapper } from "../../../../redux/store";
 import PTR from "../../../../components/global/PTR/PTR";
+import { useCallback } from "react";
 
 const convertImage = (w: number, h: number) => `
   <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -46,9 +47,43 @@ type Props = {
 
 const Page: NextPageWithLayout<Props> = (props: Props) => {
   const router = useRouter();
+
   // 18
   const [need18, handleIs18, handleIsNot18] = use18(props.post?.need18up);
 
+  const getArticle = useCallback(() => {
+    // image 處理
+    const img_article = PTT.imageReplacer(props.post?.article, (img, index) => {
+      return (
+        <div key={index}>
+          {img}
+          <Image
+            priority
+            src={img}
+            referrerPolicy="no-referrer"
+            alt={props.post?.title + "的照片"}
+            width={500}
+            height={500}
+            placeholder="blur"
+            blurDataURL={`data:image/svg+xml;base64,${toBase64(
+              convertImage(700, 475)
+            )}`}
+          />
+        </div>
+      );
+    });
+
+    // url 處理
+    const url_article = PTT.urlReplacer(img_article, (url, index) => {
+      return (
+        <a href={url} target="_blank" className="underline">
+          {url}
+        </a>
+      );
+    });
+
+    return url_article;
+  }, [props.post.article, props.post.title]);
   return need18 ? (
     <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />
   ) : (
@@ -108,25 +143,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                 "text-text3"
               )}
             >
-              {PTT.imageReplacer(props.post?.article, (img, index) => {
-                return (
-                  <div key={index}>
-                    {img}
-                    <Image
-                      priority
-                      src={img}
-                      referrerPolicy="no-referrer"
-                      alt={props.post?.title + "的照片"}
-                      width={500}
-                      height={500}
-                      placeholder="blur"
-                      blurDataURL={`data:image/svg+xml;base64,${toBase64(
-                        convertImage(700, 475)
-                      )}`}
-                    />
-                  </div>
-                );
-              })}
+              {getArticle()}
             </CardContent>
           </Card>
           <Card className={cn("p-3", "rounded-none")}>

@@ -531,6 +531,54 @@ class PTT {
     }
     return replaced;
   }
+  static urlReplacer(
+    array: any[],
+    callback: (url: string, index: number) => any
+  ) {
+    // 定義正則表達式來尋找網址部分
+    const urlRegex = /https?:\/\/\S+/g;
+
+    // 將處理結果存儲的新數組
+    const processedArray: any[] = [];
+
+    array.forEach((item) => {
+      if (typeof item === "string") {
+        // 使用正則表達式找到所有網址
+        const urls = item.match(urlRegex);
+
+        if (urls) {
+          let lastIndex = 0;
+          let i = 0;
+          urls.forEach((url) => {
+            const index = item.indexOf(url, lastIndex);
+            if (index !== -1) {
+              // 將非網址部分加入新數組
+              processedArray.push(item.substring(lastIndex, index));
+
+              const result = callback(url, i);
+              processedArray.push(result);
+
+              lastIndex = index + url.length;
+              i += 1;
+            }
+          });
+
+          // 將最後的非網址部分加入新數組
+          if (lastIndex < item.length) {
+            processedArray.push(item.substring(lastIndex));
+          }
+        } else {
+          // 如果沒有找到網址，直接將原始項目加入新數組
+          processedArray.push(item);
+        }
+      } else {
+        // 對於非字符串元素直接將原始項目加入新數組
+        processedArray.push(item);
+      }
+    });
+
+    return processedArray;
+  }
 }
 
 export default PTT;
