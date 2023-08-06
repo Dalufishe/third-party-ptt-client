@@ -120,7 +120,7 @@ const Page: NextPage<Props> = (props: Props) => {
             "z-50",
             "w-full rounded-none",
             "sticky",
-            isTabListHidden ? "top-[-40px]" : "top-0",
+            isTabListHidden ? "top-[-40px]" : "top-[-1px]",
             "transition-all"
           )}
         >

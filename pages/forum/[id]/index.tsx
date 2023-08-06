@@ -190,10 +190,10 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   useScroll(
     pageEl,
     () => {
-      setTabListHiddden(false);
+      setTabListHiddden(true);
     },
     () => {
-      setTabListHiddden(true);
+      setTabListHiddden(false);
     }
   );
 
@@ -262,14 +262,18 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         <div
           ref={pageRef}
           id="react-infinite-scroll-component"
-          className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}
+          className={cn(
+            "w-screen h-[calc(100vh-96px)] overflow-y-scroll",
+            "relative"
+          )}
         >
           {/* Searchbar */}
           <div
             className={cn(
               "sticky",
-              isTabListHidden ? "top-0" : "top-[-48px]",
-              "transition-all"
+              isTabListHidden ? "top-[-48px]" : "top-[-1px]",
+              "transition-all",
+              "z-50"
             )}
           >
             <PostSearch
