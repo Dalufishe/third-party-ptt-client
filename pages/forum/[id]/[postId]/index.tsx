@@ -20,7 +20,7 @@ import IsBottom from "../../../../components/layout/IsBottom/IsBottom";
 import getSiteURL from "../../../../utils/getSiteURL";
 import { wrapper } from "../../../../redux/store";
 import PTR from "../../../../components/global/PTR/PTR";
-import { useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 const convertImage = (w: number, h: number) => `
   <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -51,6 +51,14 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   // 18
   const [need18, handleIs18, handleIsNot18] = use18(props.post?.need18up);
 
+  // image quality
+  const [q, setQ] = useState(25);
+  useEffect(() => {
+    setTimeout(() => {
+      setQ(75);
+    }, 5000);
+  }, []);
+
   const getArticle = useCallback(() => {
     // image 處理
     const img_article = PTT.imageReplacer(props.post?.article, (img, index) => {
@@ -58,6 +66,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         <div key={index}>
           {img}
           <Image
+            quality={q}
             priority
             src={img}
             referrerPolicy="no-referrer"
@@ -93,6 +102,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           {img}
           <Image
             className="mt-1"
+            quality={q}
             priority
             src={img}
             referrerPolicy="no-referrer"
@@ -149,7 +159,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           router.push("/forum/" + props.post?.board);
         }}
       >
-        {props.post?.title}
+        <span>{props.post?.title}</span>
       </Navbar>
       {/* Main Content */}
       <PTR>
