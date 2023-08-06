@@ -84,6 +84,43 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
 
     return url_article;
   }, [props.post.article, props.post.title]);
+
+  const getCommentContent = useCallback((c: string) => {
+    // image 處理
+    const img_c = PTT.imageReplacer(c, (img, index) => {
+      return (
+        <div key={index}>
+          {img}
+          <Image
+            className="mt-1"
+            priority
+            src={img}
+            referrerPolicy="no-referrer"
+            alt={""}
+            width={250}
+            height={250}
+            placeholder="blur"
+            blurDataURL={`data:image/svg+xml;base64,${toBase64(
+              convertImage(700, 475)
+            )}`}
+          />
+        </div>
+      );
+    });
+
+    // url 處理
+    const url_c = PTT.urlReplacer(img_c, (url, index) => {
+      return (
+        <a href={url} target="_blank" className="underline">
+          {url}
+        </a>
+      );
+    });
+
+    return url_c;
+    return "";
+  }, []);
+
   return need18 ? (
     <Need18Up onIs18Click={handleIs18} onIsNot18Click={handleIsNot18} />
   ) : (
@@ -185,7 +222,9 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                       <h5 className="text-text3 whitespace-nowrap">
                         {c?.user}:
                       </h5>
-                      <h5 className="text-text3">{c?.content}</h5>
+                      <h5 className="text-text3">
+                        {getCommentContent(c?.content)}
+                      </h5>
                     </div>
                   </div>
                 </Card>
