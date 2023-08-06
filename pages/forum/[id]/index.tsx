@@ -180,11 +180,12 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   // element
   const pageRef = useRef(null);
   const [pageEl, setPageEl] = useState<any>(pageRef.current);
-  const [isTabListHidden, setTabListHiddden] = useState(false);
 
   useEffect(() => {
     setPageEl(pageRef.current);
   }, []);
+
+  const [isTabListHidden, setTabListHiddden] = useState(false);
 
   // tabs behavior
   useScroll(
@@ -253,7 +254,13 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           />
         }
       >
-        {props.board.boardName}
+        <span
+          onClick={() => {
+            pageEl?.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
+          {props.board.boardName}
+        </span>
       </Navbar>
       {/* Main Content */}
       {need18 ? (
