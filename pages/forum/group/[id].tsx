@@ -1,5 +1,5 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import PTT, { GroupBoard, HotBoard } from "../../../core/PTT";
+import PTT, { GroupBoard} from "../../../core/PTT";
 import { cn } from "../../../utils/cn";
 import {
   Tabs,

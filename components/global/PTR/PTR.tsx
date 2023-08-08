@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import React, { ReactElement, ReactNode } from "react";
+import React, { ReactElement } from "react";
 import PullToRefresh from "react-simple-pull-to-refresh";
 
 const PTR = (props: { children: ReactElement }) => {

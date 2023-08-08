@@ -1,7 +1,6 @@
 import * as cheerio from "cheerio";
 import serializeCookie from "../utils/serializeCookie";
 import idGenerator from "../utils/idGenerator";
-import { type } from "os";
 
 export type HotBoard = {
   id: string;

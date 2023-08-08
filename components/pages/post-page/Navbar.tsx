@@ -5,11 +5,11 @@ import { useRouter } from "next/router";
 
 type Props = {
   onClickLeft: () => any;
+  right: ReactNode;
   children: ReactNode;
 };
 
 const Navbar = (props: Props) => {
-  const router = useRouter();
   return (
     <div
       className={cn(
@@ -31,7 +31,7 @@ const Navbar = (props: Props) => {
           {props.children}
         </h2>
       </div>
-      <div className={cn("w-5 h-5")}></div>
+      <div className={cn("w-5 h-5")}>{props.right}</div>
     </div>
   );
 };

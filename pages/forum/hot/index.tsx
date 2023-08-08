@@ -23,7 +23,6 @@ import Head from "next/head";
 import IsBottom from "../../../components/layout/IsBottom/IsBottom";
 import getSiteURL from "../../../utils/getSiteURL";
 import { wrapper } from "../../../redux/store";
-import PullToRefresh from "react-simple-pull-to-refresh";
 import { useDispatch, useSelector } from "react-redux";
 import set_scroll_position from "../../../redux/actions/set_scroll_position";
 import set_hot_board_from_redux from "../../../redux/actions/set_hot_board";

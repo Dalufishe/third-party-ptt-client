@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import {GetStaticPaths, GetStaticProps } from "next";
 import PTT, { Post } from "../../../../core/PTT";
 import { cn } from "../../../../components/@/lib/utils";
 import {
@@ -21,6 +21,7 @@ import getSiteURL from "../../../../utils/getSiteURL";
 import { wrapper } from "../../../../redux/store";
 import PTR from "../../../../components/global/PTR/PTR";
 import { useCallback, useEffect, useRef, useState } from "react";
+import Share from "../../../../components/pages/post-page/Share";
 
 const convertImage = (w: number, h: number) => `
   <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -133,7 +134,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   // page element
   const pageRef = useRef(null);
   const [pageEl, setPageEl] = useState<any>(pageRef.current);
-console.log(pageEl)
+  console.log(pageEl);
   useEffect(() => {
     setPageEl(pageRef.current);
   }, []);
@@ -164,10 +165,11 @@ console.log(pageEl)
         onClickLeft={() => {
           router.push("/forum/" + props.post?.board);
         }}
+        right={<Share />}
       >
         <span
           onClick={() => {
-         pageEl?.scrollTo({ top: 0, behavior: "smooth" })
+            pageEl?.scrollTo({ top: 0, behavior: "smooth" });
           }}
         >
           {props.post?.title}
@@ -175,88 +177,92 @@ console.log(pageEl)
       </Navbar>
       {/* Main Content */}
       <PTR>
-        <div ref={pageRef} className="w-screen h-[calc(100vh-96px)]  overflow-y-scroll">
-
-            <Card className={cn("p-3", "rounded-none")}>
-              <CardHeader className="p-0 gap-1">
+        <div
+          ref={pageRef}
+          className="w-screen h-[calc(100vh-96px)]  overflow-y-scroll"
+        >
+          <Card className={cn("p-3", "rounded-none")}>
+            <CardHeader className="p-0 gap-1">
+              <CardDescription className="text-text2">
+                @{props.post?.author}
+              </CardDescription>
+              <CardTitle className="text-xl">{props.post?.title}</CardTitle>
+              <div className="flex justify-between">
                 <CardDescription className="text-text2">
-                  @{props.post?.author}
+                  {props.post?.board}
                 </CardDescription>
-                <CardTitle className="text-xl">{props.post?.title}</CardTitle>
-                <div className="flex justify-between">
-                  <CardDescription className="text-text2">
-                    {props.post?.board}
-                  </CardDescription>
-                  <CardDescription className={cn("text-text2 ", "flex gap-2")}>
-                    <span>{new Date(props.post?.time).toLocaleString()}</span>
-                    <span>{props.post?.edited ? "(已編輯)" : ""}</span>
-                  </CardDescription>
-                </div>
-              </CardHeader>
-            </Card>
-            <Card className={cn("p-3", "rounded-none")}>
-              <CardContent
-                className={cn(
-                  "overflow-hidden",
-                  "p-0",
-                  "whitespace-pre-wrap break-words",
-                  "text-text3"
-                )}
-              >
-                {getArticle()}
-              </CardContent>
-            </Card>
-            <Card className={cn("p-3", "rounded-none")}>
-              <CardContent
-                className={cn(
-                  "p-0",
-                  "flex justify-between items-center gap-0.5",
-                  "text-base text-text2"
-                )}
-              >
-                <div>發送: {props.post?.fromIp}</div>
-                <div>來自: {props.post?.fromCountry}</div>
-              </CardContent>
-            </Card>
-            <Card className={cn("p-2", "rounded-none", "border-b-0")}>
-              <CardContent className={cn("p-0")}>
-                {props.post?.comments.map((c) => (
-                  <Card
-                    key={c.id}
-                    className={cn(
-                      "p-0",
-                      "rounded-none",
-                      "border-x-0 border-t-0",
-                      "text-base"
-                    )}
-                  >
-                    <div className={cn("px-1 py-3")}>
-                      <div className="flex gap-3">
-                        <h5
-                          className={cn(
-                            "text-base",
-                            c.tag === "推" ? "text-text1" : "",
-                            c.tag === "噓" ? "text-red-400" : "",
-                            c.tag === "→" ? "text-red-400" : ""
-                          )}
-                        >
-                          {c.tag}
-                        </h5>
-                        <h5 className="text-text3 whitespace-nowrap">
-                          {c?.user}:
-                        </h5>
-                        <h5 className="text-text3">
-                          {getCommentContent(c?.content)}
-                        </h5>
-                      </div>
+                <CardDescription className={cn("text-text2 ", "flex gap-2")}>
+                  <span>
+                    {props.post?.time &&
+                      new Date(props.post?.time).toLocaleString()}
+                  </span>
+                  <span>{props.post?.edited ? "(已編輯)" : ""}</span>
+                </CardDescription>
+              </div>
+            </CardHeader>
+          </Card>
+          <Card className={cn("p-3", "rounded-none")}>
+            <CardContent
+              className={cn(
+                "overflow-hidden",
+                "p-0",
+                "whitespace-pre-wrap break-words",
+                "text-text3"
+              )}
+            >
+              {getArticle()}
+            </CardContent>
+          </Card>
+          <Card className={cn("p-3", "rounded-none")}>
+            <CardContent
+              className={cn(
+                "p-0",
+                "flex justify-between items-center gap-0.5",
+                "text-base text-text2"
+              )}
+            >
+              <div>發送: {props.post?.fromIp}</div>
+              <div>來自: {props.post?.fromCountry}</div>
+            </CardContent>
+          </Card>
+          <Card className={cn("p-2", "rounded-none", "border-b-0")}>
+            <CardContent className={cn("p-0")}>
+              {props.post?.comments.map((c) => (
+                <Card
+                  key={c.id}
+                  className={cn(
+                    "p-0",
+                    "rounded-none",
+                    "border-x-0 border-t-0",
+                    "text-base"
+                  )}
+                >
+                  <div className={cn("px-1 py-3")}>
+                    <div className="flex gap-3">
+                      <h5
+                        className={cn(
+                          "text-base",
+                          c.tag === "推" ? "text-text1" : "",
+                          c.tag === "噓" ? "text-red-400" : "",
+                          c.tag === "→" ? "text-red-400" : ""
+                        )}
+                      >
+                        {c.tag}
+                      </h5>
+                      <h5 className="text-text3 whitespace-nowrap">
+                        {c?.user}:
+                      </h5>
+                      <h5 className="text-text3">
+                        {getCommentContent(c?.content)}
+                      </h5>
                     </div>
-                  </Card>
-                ))}
-              </CardContent>
-            </Card>
-            <IsBottom />
-          </div>
-
+                  </div>
+                </Card>
+              ))}
+            </CardContent>
+          </Card>
+          <IsBottom />
+        </div>
       </PTR>
     </>
   );
