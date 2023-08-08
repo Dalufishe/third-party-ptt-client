@@ -1,4 +1,4 @@
-import {GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import PTT, { Post } from "../../../../core/PTT";
 import { cn } from "../../../../components/@/lib/utils";
 import {
@@ -134,7 +134,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
   // page element
   const pageRef = useRef(null);
   const [pageEl, setPageEl] = useState<any>(pageRef.current);
-  console.log(pageEl);
+
   useEffect(() => {
     setPageEl(pageRef.current);
   }, []);
