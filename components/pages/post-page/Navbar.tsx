@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import { cn } from "../../@/lib/utils";
 import { AiOutlineArrowLeft } from "react-icons/ai";
-import { useRouter } from "next/router";
 
 type Props = {
   onClickLeft: () => any;
