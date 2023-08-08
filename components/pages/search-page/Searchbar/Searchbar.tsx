@@ -3,15 +3,23 @@ import { Input } from "../../../@/components/ui/input";
 import { cn } from "../../../@/lib/utils";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
-const Searchbar = () => {
+type Props = {
+  value: string;
+  onChange: any;
+  placeholder: string;
+};
+
+const Searchbar = (props: Props) => {
   return (
     <div className={cn("dark:bg-secondary", "flex items-center gap-2", "px-4")}>
       <div className="text-xl">
         <AiOutlineArrowLeft />
       </div>
       <Input
+        value={props.value}
+        onChange={props.onChange}
         type="text"
-        placeholder={"搜尋 「老高」"}
+        placeholder={props.placeholder}
         autoComplete="off"
         className={cn(
           "dark:bg-secondary",

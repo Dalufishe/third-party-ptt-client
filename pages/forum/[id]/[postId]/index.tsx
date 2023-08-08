@@ -165,7 +165,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         onClickLeft={() => {
           router.push("/forum/" + props.post?.board);
         }}
-        right={<Share />}
+        right={<></>}
       >
         <span
           onClick={() => {

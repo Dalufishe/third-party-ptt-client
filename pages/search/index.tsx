@@ -6,10 +6,17 @@ import { NextPageWithLayout } from "../../components/layout/NextPageWithLayout";
 import Searchbar from "../../components/pages/search-page/Searchbar/Searchbar";
 
 const Page: NextPageWithLayout = () => {
-  const [searching, setSearching] = useState(false);
+  const [isSearching, setIsSearching] = useState(false);
+  const [keyword, setKeyword] = useState("");
   return (
     <div>
-      <Searchbar />
+      <Searchbar
+        value={keyword}
+        onChange={(e: any) => {
+          setKeyword(e.target.value);
+        }}
+        placeholder="搜尋 「老高」"
+      />
     </div>
   );
 };
