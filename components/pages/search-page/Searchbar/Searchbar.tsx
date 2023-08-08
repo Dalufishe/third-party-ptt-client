@@ -1,7 +1,7 @@
 import React from "react";
 import { Input } from "../../../@/components/ui/input";
 import { cn } from "../../../@/lib/utils";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { AiOutlineSearch } from "react-icons/ai";
 
 type Props = {
   value: string;
@@ -12,8 +12,8 @@ type Props = {
 const Searchbar = (props: Props) => {
   return (
     <div className={cn("dark:bg-secondary", "flex items-center gap-2", "px-4")}>
-      <div className="text-xl">
-        <AiOutlineArrowLeft />
+      <div className="text-xl" >
+        <AiOutlineSearch />
       </div>
       <Input
         value={props.value}

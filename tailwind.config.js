@@ -20,6 +20,7 @@ module.exports = {
     extend: {
       colors: {
         brand: "#0c0a66",
+        brand2: "#ff6",
         primary: colors.slate[950],
         secondary: colors.slate[800],
         text1: colors.white,
