@@ -1,12 +1,12 @@
 import React, { ReactNode } from "react";
 import { cn } from "../../../@/lib/utils";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+import { AiOutlineArrowLeft, AiOutlineSearch } from "react-icons/ai";
 import { useRouter } from "next/router";
 
 type Props = {
-  onClickLeft: () => any;
   children: ReactNode;
-  right: ReactNode;
+  onLeftClick?: () => void;
+  onRightClick?: () => void;
 };
 
 const Navbar = (props: Props) => {
@@ -19,7 +19,13 @@ const Navbar = (props: Props) => {
         "px-4"
       )}
     >
-      <div onClick={props.onClickLeft}>
+      {/* Left */}
+      <div
+        onClick={() => {
+          router.push("/forum");
+          props.onLeftClick && props.onLeftClick();
+        }}
+      >
         <AiOutlineArrowLeft className={cn("w-5 h-5")} />
       </div>
       <div>
@@ -32,7 +38,14 @@ const Navbar = (props: Props) => {
           {props.children}
         </h2>
       </div>
-      <div className={cn("w-5 h-5")}>{props.right}</div>
+      {/* Right */}
+      <div
+        onClick={() => {
+            props.onRightClick && props.onRightClick();
+        }}
+      >
+        <AiOutlineSearch className="text-2xl" />
+      </div>
     </div>
   );
 };

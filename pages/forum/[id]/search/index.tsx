@@ -1,14 +1,15 @@
-import { useCallback, useEffect, useState } from "react";
-import { cn } from "../../components/@/lib/utils";
-import DefaultLayout from "../../components/layout/DefaultLayout";
-import { NextPageWithLayout } from "../../components/layout/NextPageWithLayout";
-import Searchbar from "../../components/pages/search-page/Searchbar/Searchbar";
-import { Card, CardContent } from "../../components/@/components/ui/card";
 import { useRouter } from "next/router";
-import SearchItem from "../../components/pages/search-page/SearchItem/SearchItem";
+import DefaultLayout from "../../../../components/layout/DefaultLayout";
+import { NextPageWithLayout } from "../../../../components/layout/NextPageWithLayout";
+import { useCallback, useEffect, useState } from "react";
+import Searchbar from "../../../../components/pages/search-page/Searchbar/Searchbar";
+import SearchItem from "../../../../components/pages/search-page/SearchItem/SearchItem";
+import { cn } from "../../../../components/@/lib/utils";
+import { Card, CardContent } from "../../../../components/@/components/ui/card";
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
+  const boardName = router.query.id;
 
   const [isSearching, setIsSearching] = useState(false);
   const [keyword, setKeyword] = useState("");
@@ -22,20 +23,23 @@ const Page: NextPageWithLayout = () => {
   // 歷史搜尋紀錄
   useEffect(() => {
     setHistoryKeyword(
-      JSON.parse(localStorage.getItem("history-keyword") || "[]")
+      JSON.parse(localStorage.getItem(boardName + "-history-keyword") || "[]")
     );
-  }, []);
+  }, [boardName]);
 
   // 搜尋函式
   const handleSearch = useCallback(
     (keyword: string) => {
       // history keyword
       const result = Array.from(new Set([keyword, ...historyKeyword]));
-      localStorage.setItem("history-keyword", JSON.stringify(result));
+      localStorage.setItem(
+        boardName + "-history-keyword",
+        JSON.stringify(result)
+      );
       // routing (search id page)
-      router.push(`/search/${keyword}`);
+      router.push(`/forum/${boardName}/search/${keyword}`);
     },
-    [historyKeyword]
+    [historyKeyword,boardName]
   );
 
   // Enter 確認
@@ -46,14 +50,14 @@ const Page: NextPageWithLayout = () => {
   // 清除紀錄
   const handleClearHistory = useCallback(() => {
     setHistoryKeyword([]);
-    localStorage.setItem("history-keyword", JSON.stringify([]));
-  }, []);
+    localStorage.setItem(boardName + "-history-keyword", JSON.stringify([]));
+  }, [boardName]);
 
   return (
     <div>
       {/* 搜尋欄 */}
       <Searchbar
-        placeholder="全站搜尋 「老高」"
+        placeholder={`在 ${boardName} 搜尋 「老高」`}
         onChange={(e: any) => {
           setKeyword(e.target.value);
         }}

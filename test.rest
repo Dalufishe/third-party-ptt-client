@@ -1,0 +1,1 @@
+GET  https://cse.google.com/cse/element/v1?rsz=filtered_cse&num=10&hl=zh-TW&source=gcsc&gss=.com&start=0&cselibv=e992cd4de3c7044f&cx=partner-pub-6282720366794148:2717804370&q=CHAT&safe=off&cse_tok=AB-tC_7m_ec-lHqbmOLnOtW8p0d-:1691584995736&exp=csqr,cc&callback=google.search.cse.api15097

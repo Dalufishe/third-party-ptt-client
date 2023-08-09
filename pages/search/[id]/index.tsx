@@ -1,10 +1,8 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DefaultLayout from "../../../components/layout/DefaultLayout";
 import { NextPageWithLayout } from "../../../components/layout/NextPageWithLayout";
-import Navbar from "../../../components/pages/search-id-page/Navbar";
+import Navbar from "../../../components/pages/search-id-page/Navbar/Navbar";
 import { useRouter } from "next/router";
-import { Board, BoardItem } from "../../../core/PTT";
-import PostCard from "../../../components/pages/board-page/PostCard/PostCard";
 import {
   Tabs,
   TabsContent,
@@ -14,21 +12,28 @@ import {
 import { cn } from "../../../components/@/lib/utils";
 import PTR from "../../../components/global/PTR/PTR";
 import InfiniteScroll from "react-infinite-scroll-component";
+import Head from "next/head";
+import getSiteURL from "../../../utils/getSiteURL";
+import useBoardsNames from "../../../hooks/useBoardsNames";
 
 const Page: NextPageWithLayout = () => {
   const router = useRouter();
+
   const keyword = router.query.id as string | undefined;
-  const [currentId, setCurrentId] = useState(1);
-  const [posts, setPosts] = useState<BoardItem[]>([]);
+  const [currentId, setCurrentId] = useState(0);
+  const [posts, setPosts] = useState<any[]>([]);
+
+  // 所有看板名稱
+  const boardsNamesPromise = useBoardsNames();
 
   // 搜尋邏輯
   const handleSearch = useCallback(
-    async (id: number = 1, boardName: string = "Gossiping") => {
+    async (id: number = 0) => {
       if (keyword !== undefined) {
-        const url = `/api/searchPosts/?boardName=${boardName}&keyword=${keyword}&page=${id}`;
+        const url = "";
         const res = await fetch(url);
-        const json: Board = await res.json();
-        return json.data;
+        const searchPosts = await res.json();
+        return searchPosts;
       } else {
         return [];
       }
@@ -63,6 +68,19 @@ const Page: NextPageWithLayout = () => {
 
   return (
     <div>
+      <Head>
+        <title>「{keyword}」的搜尋結果 - 我の批踢踢</title>
+        <meta
+          property="og:title"
+          content={`「${keyword}」的搜尋結果 - 我の批踢踢`}
+          key="title"
+        />
+        <meta
+          property="og:url"
+          content={`${getSiteURL()}/search/${keyword}`}
+          key="url"
+        />
+      </Head>
       <Navbar>「{keyword}」的搜尋結果：</Navbar>
       <Tabs defaultValue="文章" className={cn("w-full", "relative")}>
         <TabsList
@@ -73,19 +91,18 @@ const Page: NextPageWithLayout = () => {
             "transition-all"
           )}
         >
-          <TabsTrigger value="綜合" className="w-full">
-            綜合
-          </TabsTrigger>
           <TabsTrigger value="文章" className="w-full">
             文章
           </TabsTrigger>
           <TabsTrigger value="看板" className="w-full">
             看板
           </TabsTrigger>
+          <TabsTrigger value="用戶" className="w-full">
+            用戶
+          </TabsTrigger>
         </TabsList>
-        <TabsContent value="綜合">開發中</TabsContent>
         <TabsContent value="文章" className="mt-0">
-          <div
+          {/* <div
             className="h-[calc(100vh-144px)] overflow-scroll"
             id="react-infinite-scroll-component"
           >
@@ -101,14 +118,20 @@ const Page: NextPageWithLayout = () => {
               <PTR>
                 <div>
                   {posts.map((post) => (
-                    <PostCard key={post.id} post={post} />
+                    <></>
                   ))}
                 </div>
               </PTR>
             </InfiniteScroll>
-          </div>
+          </div> */}
+          開發中
         </TabsContent>
-        <TabsContent value="看板">開發中</TabsContent>
+        <TabsContent value="看板" className="mt-0">
+          開發中
+        </TabsContent>
+        <TabsContent value="用戶" className="mt-0">
+          開發中
+        </TabsContent>
       </Tabs>
     </div>
   );

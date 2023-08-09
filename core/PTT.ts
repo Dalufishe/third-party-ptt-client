@@ -62,12 +62,17 @@ export type BoardMan = {
   href: string;
 }[];
 
+export type GlobalPostItem = {
+  board: string;
+  title: string;
+  id: string;
+};
+
 class PTT {
   static hotBoardsURL = "https://www.ptt.cc/bbs/hotboards.html";
   static groupBoardsURL = "https://www.ptt.cc/cls";
   static boardURL = "https://www.ptt.cc/bbs";
   static boardManURL = "https://www.ptt.cc/man";
-
   static async getHotBoards(): Promise<HotBoard[]> {
     const data = await fetch(this.hotBoardsURL);
     const html = await data.text();
@@ -512,6 +517,43 @@ class PTT {
       boardName,
     };
   }
+  // static async searchGlobalPosts(
+  //   keyword: string,
+  //   num: number,
+  //   start: number
+  // ): Promise<GlobalPostItem[]> {
+  //   // 使用 https://briian.com/ptt-search.htm "PTT搜尋引擎"
+  //   const res = await fetch(
+  //     `https://cse.google.com/cse/element/v1?rsz=filtered_cse&num=${num}&hl=zh-TW&source=gcsc&gss=.cc&start=${start}&cselibv=e992cd4de3c7044f&cx=014810418713372006927:9p-kpppue9u&q=${keyword}&safe=off&cse_tok=AB-tC_49oDVNBL_sseXXyT-wACq-:1691591672999&sort=&exp=csqr,cc&callback=google.search.cse.api19131`
+  //   );
+
+  //   const jsp = await res.text();
+  //   console.log(jsp);
+  //   const json = JSON.parse(
+  //     jsp.replace(/\/\*O_o\*\/\ngoogle.search.cse.api19131\(/u, "").slice(0, -2)
+  //   );
+
+  //   const posts = json.results.map((r: any) => {
+  //     const rawTitle: string = r.titleNoFormatting;
+  //     const board = rawTitle
+  //       .match(/看板(\w+)/gu)?.[0]
+  //       .toString()
+  //       .slice(2);
+  //     const title = rawTitle
+  //       .match(/.+(?=- 看板)/gu)?.[0]
+  //       .toString()
+  //       .trim();
+  //     const id = rawTitle
+  //       .match(/([^/]+)\/([^/]+)(?=\.html$)/gu)?.[0]
+  //       .toString();
+  //     return {
+  //       board,
+  //       title,
+  //       id,
+  //     };
+  //   });
+  //   return posts;
+  // }
   static imageReplacer(
     content: string,
     cb: (image: string, index: number) => any

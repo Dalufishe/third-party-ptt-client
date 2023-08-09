@@ -33,6 +33,7 @@ import set_board_data_from_redux from "../../../redux/actions/set_board_data";
 import BoardMenu from "../../../components/pages/board-page/BoardMenu/BoardMenu";
 import PTR from "../../../components/global/PTR/PTR";
 import PostCard from "../../../components/pages/board-page/PostCard/PostCard";
+import { AiOutlineSearch } from "react-icons/ai";
 
 type Props = {
   board: Board;
@@ -53,6 +54,8 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     (state: any) => state.board_data?.[props.board.boardName]
   );
 
+  const [currentId, setCurrentId] = useState(Number(props.board.currentId));
+
   // 進入頁面時
   useEffect(() => {
     // 若 redux 中沒有資料
@@ -69,112 +72,73 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     }
   }, []);
 
-  // 數據段 (用於無限加載 & 重整定位)
-  const [currentId, setCurrentId] = useState(props.board.currentId);
-
-  //* 文章搜尋
-
-  const [keyword, setKeyword] = useState("");
-
-  const handlePostSearchSubmit = useCallback(
-    async (data: any) => {
-      setKeyword(data.keyword);
-      setCurrentId("1");
-      setFetchNextDataMode("search");
-      const url = `/api/searchPosts/?boardName=${
-        props.board.boardName
-      }&keyword=${data.keyword}&page=${1}`;
-      const res = await fetch(url);
-      const json = await res.json();
-      set_board_data(json.data);
-    },
-    [props.board.boardName]
-  );
-
   //* 無限加載
 
-  // 滾動模式
-  type fetchNextDataType = "general" | "search";
+  const fetchNextData = useCallback(async () => {
+    let url = "";
+    // 一般模式下
 
-  // 預設: 一般模式
-  const [fetchNextDataMode, setFetchNextDataMode] =
-    useState<fetchNextDataType>("general");
+    const nextId = currentId - 1;
+    url = `/api/getBoard?name=${props.board.boardName}&id=${nextId}`;
+    setCurrentId(nextId);
 
-  const fetchNextData = useCallback(
-    async (type: fetchNextDataType) => {
-      let url = "";
-      // 一般模式下
-      if (type === "general") {
-        const nextId = Number(currentId) - 1;
-        url = `/api/getBoard?name=${props.board.boardName}&id=${nextId}`;
-        setCurrentId(String(nextId));
-      }
-      // 查詢模式下
-      else if (type === "search") {
-        const nextId = Number(currentId) + 1;
-        url = `/api/searchPosts/?boardName=${props.board.boardName}&keyword=${keyword}&page=${nextId}`;
-        setCurrentId(String(nextId));
-      }
-      // 獲取資料
-      const res = await fetch(url);
-      const json = await res.json();
+    // 獲取資料
+    const res = await fetch(url);
+    const json = await res.json();
 
-      // 設置資料
-      set_board_data([...board_data, ...json?.data]);
-      dispatch(
-        set_board_data_from_redux(props.board.boardName, [
-          ...board_data,
-          ...json?.data,
-        ])
-      );
-    },
-    [currentId, board_data, router.query.id, keyword]
-  );
+    // 設置資料
+    set_board_data([...board_data, ...json?.data]);
+    dispatch(
+      set_board_data_from_redux(props.board.boardName, [
+        ...board_data,
+        ...json?.data,
+      ])
+    );
+  }, [currentId, board_data, router.query.id]);
 
   //* 特殊情況下的初始資料補全
 
   useEffect(() => {
     if (board_data?.length != 0 && board_data?.length < 20) {
-      fetchNextData(fetchNextDataMode);
+      fetchNextData();
     }
-  }, [board_data?.length, fetchNextDataMode]);
-
-  const restartPage = useCallback(() => {
-    setCurrentId(String(Number(props.board.currentId) + 2));
-    setFetchNextDataMode("general");
-    set_board_data(["PLACE_HOLDER"]);
-  }, []);
+  }, [board_data?.length]);
 
   //* 過濾篩選器
-  const sortData = useMemo(
-    () => [
-      { name: "類型", data: ["不限", "公告", "Re:"] },
-      { name: "排序依據", data: ["關聯性", "最新", "最舊"] },
-      { name: "發文時間", data: ["不限時間", "今天", "一周內"] },
-    ],
-    []
-  );
+  // const restartPage = useCallback(() => {
+  //   setCurrentId(Number(props.board.currentId) + 2);
+  //   set_board_data(["PLACE_HOLDER"]);
+  // }, []);
 
-  const [defaultSortData, setDefaultSortData] = useState<CurrentSortData>(
-    sortData.map((item) => {
-      return { name: item.name, data: item.data[0] };
-    })
-  );
+  // const sortData = useMemo(
+  //   () => [
+  //     { name: "類型", data: ["不限", "公告", "Re:"] },
+  //     { name: "排序依據", data: ["關聯性", "最新", "最舊"] },
+  //     { name: "發文時間", data: ["不限時間", "今天", "一周內"] },
+  //   ],
+  //   []
+  // );
 
-  const handleSortConfirm = useCallback((data: CurrentSortData) => {
-    setDefaultSortData(data);
-    for (let d of data) {
-      if (d.name === "類型") {
-        if (d.data === "不限") {
-          restartPage();
-        } else if (d.data === "Re:") {
-          handlePostSearchSubmit({ keyword: d.data });
-        } else {
-          handlePostSearchSubmit({ keyword: "[" + d.data + "]" });
-        }
-      }
-    }
-  }, []);
+  // const [defaultSortData, setDefaultSortData] = useState<CurrentSortData>(
+  //   sortData.map((item) => {
+  //     return { name: item.name, data: item.data[0] };
+  //   })
+  // );
+
+  // const handleSortConfirm = useCallback((data: CurrentSortData) => {
+  //   setDefaultSortData(data);
+  //   for (let d of data) {
+  //     if (d.name === "類型") {
+  //       if (d.data === "不限") {
+  //         restartPage();
+  //       } else if (d.data === "Re:") {
+  //         handlePostSearchSubmit({ keyword: d.data });
+  //       } else {
+  //         handlePostSearchSubmit({ keyword: "[" + d.data + "]" });
+  //       }
+  //     }
+  //   }
+  // }, []);
 
   //* 滾動效果 (記憶, 選單隱藏)
 
@@ -238,15 +202,10 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
       </Head>
       {/* replaced Navbar */}
       <Navbar
-        onClickLeft={() => {
-          router.push("/forum");
+        onRightClick={() => {
+
+          router.push(`/forum/${props.board.boardName}/search`);
         }}
-        right={
-          <BoardMenu
-            boardMan={props.boardMan}
-            boardName={props.board.boardName}
-          />
-        }
       >
         <span
           onClick={() => {
@@ -276,25 +235,13 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
               "transition-all",
               "z-50"
             )}
-          >
-            <PostSearch
-              placeholder={`在 ${props.board.boardName} 版搜尋文章...`}
-              onSubmit={handlePostSearchSubmit}
-              right={
-                <Sorter
-                  sortData={sortData}
-                  defaultSortData={defaultSortData}
-                  onConfirm={handleSortConfirm}
-                />
-              }
-            />
-          </div>
+          ></div>
           {/* Posts */}
           <InfiniteScroll
             scrollableTarget="react-infinite-scroll-component"
             dataLength={board_data?.length || 0}
             next={() => {
-              fetchNextData(fetchNextDataMode);
+              fetchNextData();
             }}
             hasMore={true}
             loader={<div></div>}

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react";
-import { cn } from "../../@/lib/utils";
+import { cn } from "../../../@/lib/utils";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { useRouter } from "next/router";
 
@@ -22,7 +22,7 @@ const Navbar = (props: Props) => {
         <AiOutlineArrowLeft
           className={cn("w-5 h-5")}
           onClick={() => {
-            router.push("/search");
+            router.back();
           }}
         />
       </div>
