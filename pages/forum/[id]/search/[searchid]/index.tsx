@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-
 import { useRouter } from "next/router";
-
 import InfiniteScroll from "react-infinite-scroll-component";
 import Head from "next/head";
 import { NextPageWithLayout } from "../../../../../components/layout/NextPageWithLayout";
@@ -11,12 +9,17 @@ import DefaultLayout from "../../../../../components/layout/DefaultLayout";
 import PTR from "../../../../../components/global/PTR/PTR";
 import { BoardItem } from "../../../../../core/PTT";
 import PostCard from "../../../../../components/pages/board-page/PostCard/PostCard";
+import { GetServerSideProps, GetServerSidePropsContext } from "next";
 
-const Page: NextPageWithLayout = () => {
-  const router = useRouter();
+type Props = {
+  keyword: string;
+  boardName: string;
+};
 
-  const keyword = router.query.searchid as string | undefined;
-  const boardName = router.query.id;
+const Page: NextPageWithLayout<Props> = (props: Props) => {
+  
+  const keyword = props.keyword;
+  const boardName = props.boardName;
 
   const [currentId, setCurrentId] = useState(1);
   const [posts, setPosts] = useState<any[]>([]);
@@ -105,6 +108,17 @@ const Page: NextPageWithLayout = () => {
       </div>
     </div>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async (
+  ctx: GetServerSidePropsContext
+) => {
+  console.log(ctx.params);
+  const keyword = ctx.params?.searchid || "";
+  const boardName = ctx.params?.id || "";
+  return {
+    props: { keyword, boardName },
+  };
 };
 
 Page.getLayout = function getLayout(page) {
