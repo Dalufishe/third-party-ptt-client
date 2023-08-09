@@ -96,8 +96,8 @@ const Page: NextPageWithLayout = () => {
         >
           <PTR>
             <div>
-              {posts.map((post) => (
-                <PostCard post={post}/>
+              {posts.map((post: BoardItem) => (
+                <PostCard key={post.id} post={post} />
               ))}
             </div>
           </PTR>
