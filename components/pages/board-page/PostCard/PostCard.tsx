@@ -19,7 +19,7 @@ const PostCard = (props: Props) => {
   }, []);
 
   return (
-    <Link key={post.id} href={handleLink(post)} onClick={props.onClick}>
+    <Link href={handleLink(post)} onClick={props.onClick}>
       <Card className="rounded-none">
         <CardContent
           className={cn(

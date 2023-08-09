@@ -300,8 +300,8 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
             loader={<div></div>}
           >
             <PTR>
-              {board_data?.map((post: any) => (
-                <PostCard post={post} onClick={handleNextPage} />
+              {board_data?.map((post: BoardItem) => (
+                <PostCard key={post.id} post={post} onClick={handleNextPage} />
               ))}
             </PTR>
           </InfiniteScroll>
