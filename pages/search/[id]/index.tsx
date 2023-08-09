@@ -24,7 +24,7 @@ const Page: NextPageWithLayout = () => {
   const [posts, setPosts] = useState<any[]>([]);
 
   // 所有看板名稱
-  const boardsNamesPromise = useBoardsNames();
+  // const boardsNamesPromise = useBoardsNames();
 
   // 搜尋邏輯
   const handleSearch = useCallback(
