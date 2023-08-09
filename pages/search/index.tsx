@@ -32,7 +32,6 @@ const Page: NextPageWithLayout = () => {
     (keyword: string) => {
       // history keyword
       const result = Array.from(new Set([keyword, ...historyKeyword]));
-      setHistoryKeyword(result);
       localStorage.setItem("history-keyword", JSON.stringify(result));
       // routing (search id page)
       router.push(`/search/${keyword}`);
