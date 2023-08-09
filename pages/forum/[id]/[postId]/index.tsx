@@ -161,7 +161,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
       {/* replaced Navbar */}
       <Navbar
         onClickLeft={() => {
-          router.push("/forum/" + props.post?.board);
+          router.back();
         }}
         right={<></>}
       >
