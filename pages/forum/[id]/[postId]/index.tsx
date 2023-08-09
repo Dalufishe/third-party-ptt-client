@@ -250,7 +250,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                       <h5 className="text-text3 whitespace-nowrap">
                         {c?.user}:
                       </h5>
-                      <h5 className="text-text3">
+                      <h5 className="text-text3 w-[70%] break-words">
                         {getCommentContent(c?.content)}
                       </h5>
                     </div>
