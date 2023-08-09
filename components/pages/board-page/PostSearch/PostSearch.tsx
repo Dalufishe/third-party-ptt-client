@@ -10,8 +10,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { cn } from "../../../@/lib/utils";
-import { MdOutlineTune } from "react-icons/md";
-import Sorter from "../Sorter/Sorter";
 
 const FormSchema = z.object({
   keyword: z.string(),
