@@ -1,7 +1,5 @@
-import { GetStaticPaths, GetStaticProps, NextPage } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import PTT, { Board, BoardItem, BoardMan } from "../../../core/PTT";
-import { Card, CardContent } from "../../../components/@/components/ui/card";
-import Link from "next/link";
 import { cn } from "../../../utils/cn";
 import Need18Up from "../../../components/layout/Need18Up/Need18Up";
 import {
@@ -9,7 +7,6 @@ import {
   useState,
   useRef,
   useEffect,
-  useMemo,
   useLayoutEffect,
 } from "react";
 import { useRouter } from "next/router";
@@ -19,21 +16,15 @@ import Head from "next/head";
 import useScroll from "../../../hooks/useScroll";
 import getSiteURL from "../../../utils/getSiteURL";
 import { wrapper } from "../../../redux/store";
-import PostSearch from "../../../components/pages/board-page/PostSearch/PostSearch";
 import { NextPageWithLayout } from "../../../components/layout/NextPageWithLayout";
 import DefaultLayout from "../../../components/layout/DefaultLayout";
 import Navbar from "../../../components/pages/board-page/Navbar/Navbar";
-import Sorter, {
-  CurrentSortData,
-} from "../../../components/pages/board-page/Sorter/Sorter";
 import useScrollMemo from "../../../hooks/useScrollMemo";
 import { useDispatch, useSelector } from "react-redux";
 import set_scroll_position from "../../../redux/actions/set_scroll_position";
 import set_board_data_from_redux from "../../../redux/actions/set_board_data";
-import BoardMenu from "../../../components/pages/board-page/BoardMenu/BoardMenu";
 import PTR from "../../../components/global/PTR/PTR";
 import PostCard from "../../../components/pages/board-page/PostCard/PostCard";
-import { AiOutlineSearch } from "react-icons/ai";
 
 type Props = {
   board: Board;

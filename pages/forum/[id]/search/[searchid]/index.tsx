@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/router";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Head from "next/head";
 import { NextPageWithLayout } from "../../../../../components/layout/NextPageWithLayout";

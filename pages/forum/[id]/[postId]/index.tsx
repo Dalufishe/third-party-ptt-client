@@ -21,6 +21,7 @@ import getSiteURL from "../../../../utils/getSiteURL";
 import { wrapper } from "../../../../redux/store";
 import PTR from "../../../../components/global/PTR/PTR";
 import { useCallback, useEffect, useRef, useState } from "react";
+
 const convertImage = (w: number, h: number) => `
   <svg width="${w}" height="${h}" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <defs>
@@ -190,10 +191,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                   {props.post?.board}
                 </CardDescription>
                 <CardDescription className={cn("text-text2 ", "flex gap-2")}>
-                  <span>
-                    {props.post?.time &&
-                      new Date(props.post?.time).toLocaleString()}
-                  </span>
+                  <span>{new Date(props.post?.time).toLocaleString()}</span>
                   <span>{props.post?.edited ? "(已編輯)" : ""}</span>
                 </CardDescription>
               </div>

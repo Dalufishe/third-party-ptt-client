@@ -7,8 +7,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../../components/@/components/ui/tabs";
-import { Card, CardContent } from "../../../components/@/components/ui/card";
-import Link from "next/link";
 import useScroll from "../../../hooks/useScroll";
 import {
   useCallback,
