@@ -117,7 +117,6 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
 export const getServerSideProps: GetServerSideProps = async (
   ctx: GetServerSidePropsContext
 ) => {
-  console.log(ctx.params);
   const keyword = ctx.params?.searchid || "";
   const boardName = ctx.params?.id || "";
   return {

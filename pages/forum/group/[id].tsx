@@ -1,5 +1,5 @@
 import type { GetStaticPaths, GetStaticProps, NextPage } from "next";
-import PTT, { GroupBoard} from "../../../core/PTT";
+import PTT, { GroupBoard } from "../../../core/PTT";
 import { cn } from "../../../utils/cn";
 import {
   Tabs,
@@ -26,7 +26,6 @@ type Props = {
 
 const Page: NextPage<Props> = (props: Props) => {
   const router = useRouter();
-
   return (
     <div className={cn("w-screen h-[calc(100vh-96px)] overflow-y-scroll")}>
       <Head>
@@ -59,7 +58,14 @@ const Page: NextPage<Props> = (props: Props) => {
               <PTR key={forumType.name}>
                 <TabsContent value={forumType.name} className="mt-0">
                   {props.groups?.map((forum) => (
-                    <Link key={forum.id} href={forum.boardHref}>
+                    <Link
+                      key={forum.id}
+                      href={
+                        forum.boardType === "group"
+                          ? forum.boardHref
+                          : `/forum/${forum.boardHref}`
+                      }
+                    >
                       <Card className="rounded-none">
                         <CardContent
                           className={cn(
@@ -70,7 +76,12 @@ const Page: NextPage<Props> = (props: Props) => {
                         >
                           <div className="flex justify-between">
                             <div className="flex">
-                              <h3>{forum.boardName}</h3>
+                              <h3>
+                                {forum.boardClass === "一一"
+                                  ? ""
+                                  : forum.boardClass + "・"}
+                                {forum.boardName}
+                              </h3>
                             </div>
                             <div></div>
                           </div>

@@ -18,6 +18,7 @@ export type GroupBoard = {
   boardName: string;
   boardTitle: string;
   boardHref: string;
+  boardType: "group" | "board";
 };
 
 export type BoardItem = {
@@ -149,6 +150,7 @@ class PTT {
         boardName: "",
         boardTitle: "",
         boardHref: "0",
+        boardType: "group",
       });
     });
 
@@ -165,8 +167,17 @@ class PTT {
       groupBoards[index].boardTitle = $(this).text().slice(1);
     });
     $(".b-ent>.board").each(function (index) {
-      groupBoards[index].boardHref =
-        $(this).attr("href")?.match(/\d+$/gu)?.toString() || "";
+      let href = $(this).attr("href")?.match(/\d+$/gu)?.toString() || "";
+      if (href === "") {
+        groupBoards[index].boardType = "board";
+        href =
+          $(this)
+            .attr("href")
+            ?.match(/(.+)(?=\/index\.html$)/gu)
+            ?.toString()
+            .slice(5) || "";
+      }
+      groupBoards[index].boardHref = href;
     });
 
     return groupBoards;

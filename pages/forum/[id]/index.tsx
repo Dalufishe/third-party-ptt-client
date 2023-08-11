@@ -267,7 +267,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = hotBoards.map((board) => "/forum/" + board.boardHref);
   return {
     paths,
-    fallback: false,
+    fallback: "blocking",
   };
 };
 
