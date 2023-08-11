@@ -26,6 +26,7 @@ import set_scroll_position from "../../../redux/actions/set_scroll_position";
 import set_hot_board_from_redux from "../../../redux/actions/set_hot_board";
 import PTR from "../../../components/global/PTR/PTR";
 import HotBoardCard from "../../../components/pages/hot-board-page/HotBoardCard";
+import Loading from "../../../components/global/Loading/Loading";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -135,10 +136,11 @@ const Page: NextPage<Props> = (props: Props) => {
             </TabsTrigger>
           ))}
         </TabsList>
-
         {forumsType.map((forumType) => {
           if (forumType.name === "熱門看板") {
-            return (
+            return !props.forums.length ? (
+              <Loading />
+            ) : (
               <PTR key={forumType.name}>
                 <TabsContent value={forumType.name} className="mt-0">
                   {hot_board.map((forum) => (

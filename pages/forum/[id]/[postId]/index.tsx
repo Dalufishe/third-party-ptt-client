@@ -59,9 +59,9 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     }, 5000);
   }, []);
 
-  const getArticle = useCallback(() => {
+  const getArticle = useCallback((article: string) => {
     // image 處理
-    const img_article = PTT.imageReplacer(props.post?.article, (img, index) => {
+    const img_article = PTT.imageReplacer(article, (img, index) => {
       return (
         <div key={index}>
           {img}
@@ -70,7 +70,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
             priority
             src={img}
             referrerPolicy="no-referrer"
-            alt={props.post?.title + "的照片"}
+            alt={""}
             width={500}
             height={500}
             placeholder="blur"
@@ -92,7 +92,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
     });
 
     return url_article;
-  }, [props.post.article, props.post.title]);
+  }, []);
 
   const getCommentContent = useCallback((c: string) => {
     // image 處理
@@ -206,7 +206,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
                 "text-text3"
               )}
             >
-              {getArticle()}
+              {getArticle(props.post.article)}
             </CardContent>
           </Card>
           <Card className={cn("p-3", "rounded-none")}>

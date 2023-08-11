@@ -14,6 +14,7 @@ import getSiteURL from "../../../utils/getSiteURL";
 import { wrapper } from "../../../redux/store";
 import PTR from "../../../components/global/PTR/PTR";
 import GroupBoardCard from "../../../components/pages/group-board-page/GroupBoardCard";
+import Loading from "../../../components/global/Loading/Loading";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -53,7 +54,9 @@ const Page: NextPage<Props> = (props: Props) => {
         </TabsList>
         {forumsType.map((forumType) => {
           if (forumType.name === "分類看板") {
-            return (
+            return !props.groups.length ? (
+              <Loading />
+            ) : (
               <PTR key={forumType.name}>
                 <TabsContent value={forumType.name} className="mt-0">
                   {props.groups?.map((forum) => (
