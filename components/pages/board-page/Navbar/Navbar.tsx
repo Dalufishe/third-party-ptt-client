@@ -22,7 +22,7 @@ const Navbar = (props: Props) => {
       {/* Left */}
       <div
         onClick={() => {
-          router.push("/forum");
+          router.back();
           props.onLeftClick && props.onLeftClick();
         }}
       >
