@@ -10,6 +10,7 @@ import PTR from "../../../../../components/global/PTR/PTR";
 import { BoardItem } from "../../../../../core/PTT";
 import PostCard from "../../../../../components/pages/board-page/PostCard/PostCard";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
+import Loading from "../../../../../components/global/Loading/Loading";
 
 type Props = {
   keyword: string;
@@ -17,7 +18,6 @@ type Props = {
 };
 
 const Page: NextPageWithLayout<Props> = (props: Props) => {
-  
   const keyword = props.keyword;
   const boardName = props.boardName;
 
@@ -84,28 +84,32 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         「{keyword}」在 {boardName} 的搜尋結果：
       </Navbar>
 
-      <div
-        className="h-[calc(100vh-96px)] overflow-scroll"
-        id="react-infinite-scroll-component"
-      >
-        <InfiniteScroll
-          scrollableTarget="react-infinite-scroll-component"
-          dataLength={posts?.length || 0}
-          next={() => {
-            fetchNextData();
-          }}
-          hasMore={true}
-          loader={<div></div>}
+      {!posts.length ? (
+        <Loading />
+      ) : (
+        <div
+          className="h-[calc(100vh-96px)] overflow-scroll"
+          id="react-infinite-scroll-component"
         >
-          <PTR>
-            <div>
-              {posts.map((post: BoardItem) => (
-                <PostCard key={post.id} post={post} />
-              ))}
-            </div>
-          </PTR>
-        </InfiniteScroll>
-      </div>
+          <InfiniteScroll
+            scrollableTarget="react-infinite-scroll-component"
+            dataLength={posts?.length || 0}
+            next={() => {
+              fetchNextData();
+            }}
+            hasMore={true}
+            loader={<div></div>}
+          >
+            <PTR>
+              <div>
+                {posts.map((post: BoardItem) => (
+                  <PostCard key={post.id} post={post} />
+                ))}
+              </div>
+            </PTR>
+          </InfiniteScroll>
+        </div>
+      )}
     </div>
   );
 };
