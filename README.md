@@ -1,34 +1,31 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 我の批踢踢
 
-## Getting Started
+全新的 PTT 批踢踢第三方客戶端，快速、簡潔。
 
-First, run the development server:
+### 特色功能
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+- 迅速的初始頁面載入 (小於三秒)。
+- 簡潔的 UI 介面，並保留經典的藍黃導航欄 (Navbar)。
+- 免登入，開箱即用。
+- 支持跨平台，響應式網頁設計 (RWD)。
+- 大量靜態生成頁 (熱門看板，熱門文章等)，使用者體驗更加分。
+- 無限滾動 & 下拉加載，使閱讀體驗不間斷。
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 開發計畫
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+#### 加入新功能
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- [ ] Youtube，維基百科等嵌入頁面。
+- [ ] 支持文章、留言高亮顯示 (highlight)。
+- [ ] 全站搜尋系統。
+- [x] 支持發文、留言、登入 ptt。
+- [x] bbs 連接替代爬蟲，改善效能 + 支持更多功能。
+- [x] 更豐富的自訂義配置項。
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+#### 修復已知問題
 
-## Learn More
+### 參與開發
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+首先、我們對您願意為我們小小的專案做貢獻表示感謝。
+截至 2023/8/11，我們的團隊僅有一個菜鳥開發者 (Dalufishe) 負責網站的開發 & 維護，及一位 QA 工程師 (Voke) 保持著網站的品質有一定水準。
+若您願意協助我們壯大這款應用程式，可以透過 discord 和我們聊聊或者直接發 `Pull Request`。
