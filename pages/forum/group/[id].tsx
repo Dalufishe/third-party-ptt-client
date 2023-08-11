@@ -7,14 +7,13 @@ import {
   TabsList,
   TabsTrigger,
 } from "../../../components/@/components/ui/tabs";
-import { Card, CardContent } from "../../../components/@/components/ui/card";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import Head from "next/head";
 import IsBottom from "../../../components/layout/IsBottom/IsBottom";
 import getSiteURL from "../../../utils/getSiteURL";
 import { wrapper } from "../../../redux/store";
 import PTR from "../../../components/global/PTR/PTR";
+import GroupBoardCard from "../../../components/pages/group-board-page/GroupBoardCard";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -58,39 +57,7 @@ const Page: NextPage<Props> = (props: Props) => {
               <PTR key={forumType.name}>
                 <TabsContent value={forumType.name} className="mt-0">
                   {props.groups?.map((forum) => (
-                    <Link
-                      key={forum.id}
-                      href={
-                        forum.boardType === "group"
-                          ? forum.boardHref
-                          : `/forum/${forum.boardHref}`
-                      }
-                    >
-                      <Card className="rounded-none">
-                        <CardContent
-                          className={cn(
-                            "bg-primary",
-                            "flex flex-col justify-between",
-                            "p-2"
-                          )}
-                        >
-                          <div className="flex justify-between">
-                            <div className="flex">
-                              <h3>
-                                {forum.boardClass === "一一"
-                                  ? ""
-                                  : forum.boardClass + "・"}
-                                {forum.boardName}
-                              </h3>
-                            </div>
-                            <div></div>
-                          </div>
-                          <div className="text-text2 text-sm">
-                            {forum.boardTitle}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
+                    <GroupBoardCard key={forum.id} forum={forum} />
                   ))}
                   <IsBottom />
                 </TabsContent>

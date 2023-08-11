@@ -27,6 +27,7 @@ import { useDispatch, useSelector } from "react-redux";
 import set_scroll_position from "../../../redux/actions/set_scroll_position";
 import set_hot_board_from_redux from "../../../redux/actions/set_hot_board";
 import PTR from "../../../components/global/PTR/PTR";
+import HotBoardCard from "../../../components/pages/hot-board-page/HotBoardCard";
 
 const forumsType = [
   { name: "熱門看板", href: "/forum/hot" },
@@ -143,46 +144,11 @@ const Page: NextPage<Props> = (props: Props) => {
               <PTR key={forumType.name}>
                 <TabsContent value={forumType.name} className="mt-0">
                   {hot_board.map((forum) => (
-                    <Link
+                    <HotBoardCard
                       key={forum.id}
-                      href={forum.boardHref}
+                      forum={forum}
                       onClick={handleNextPage}
-                    >
-                      <Card className="rounded-none">
-                        <CardContent
-                          className={cn(
-                            "bg-primary",
-                            "flex flex-col justify-between",
-                            "p-2"
-                          )}
-                        >
-                          <div className="flex justify-between">
-                            <div className="flex">
-                              <h3>{forum.boardClass}</h3>・
-                              <h3>{forum.boardName}</h3>
-                            </div>
-                            <div>
-                              <h3
-                                className={cn(
-                                  forum.boardLevel === 1 ? "text-cyan-400" : "",
-                                  forum.boardLevel === 2 ? "text-blue-400" : "",
-                                  forum.boardLevel === 3 ? "text-red-400" : "",
-                                  forum.boardLevel === 4 ? "text-text1" : "",
-                                  forum.boardLevel === 5
-                                    ? "text-yellow-400"
-                                    : ""
-                                )}
-                              >
-                                {forum.boardRate}
-                              </h3>
-                            </div>
-                          </div>
-                          <div className="text-text2 text-sm">
-                            {forum.boardTitle}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </Link>
+                    />
                   ))}
                   <IsBottom />
                 </TabsContent>

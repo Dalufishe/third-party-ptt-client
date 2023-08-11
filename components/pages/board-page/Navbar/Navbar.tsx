@@ -41,7 +41,7 @@ const Navbar = (props: Props) => {
       {/* Right */}
       <div
         onClick={() => {
-            props.onRightClick && props.onRightClick();
+          props.onRightClick && props.onRightClick();
         }}
       >
         <AiOutlineSearch className="text-2xl" />

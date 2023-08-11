@@ -203,7 +203,6 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
       {/* replaced Navbar */}
       <Navbar
         onRightClick={() => {
-
           router.push(`/forum/${props.board.boardName}/search`);
         }}
       >
