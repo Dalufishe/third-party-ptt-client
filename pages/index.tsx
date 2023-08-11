@@ -1,13 +1,8 @@
 import type { NextPage } from "next";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
+import useRedirect from "../hooks/useRedirect";
 
 const IndexPage: NextPage = () => {
-  const router = useRouter();
-
-  useEffect(() => {
-    router.push("/forum/hot");
-  }, [router]);
+  useRedirect("/forum/hot");
 
   return <></>;
 };
