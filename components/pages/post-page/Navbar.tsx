@@ -94,9 +94,9 @@ const Navbar = (props: Props) => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="dark:bg-secondary rounded-t-sm">
-          <DropdownMenuItem className="text-base">
-            <Link href={post.originUrl} target="_blank">原版網址</Link>
-          </DropdownMenuItem>
+          <Link href={post.originUrl} target="_blank">
+            <DropdownMenuItem className="text-base">原版網址</DropdownMenuItem>
+          </Link>
           <DropdownMenuItem className="text-base" onClick={handleCopyLink}>
             複製連結
           </DropdownMenuItem>
