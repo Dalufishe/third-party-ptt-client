@@ -1,14 +1,18 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useCallback } from "react";
 import { cn } from "../../@/lib/utils";
 import { AiOutlineArrowLeft } from "react-icons/ai";
+import { FiMoreVertical } from "react-icons/fi";
+import { useRouter } from "next/router";
 
 type Props = {
-  onClickLeft: () => any;
-  right: ReactNode;
   children: ReactNode;
 };
 
 const Navbar = (props: Props) => {
+  const router = useRouter();
+  const handleLeft = useCallback(() => {
+    router.back();
+  }, []);
   return (
     <div
       className={cn(
@@ -17,7 +21,7 @@ const Navbar = (props: Props) => {
         "px-4"
       )}
     >
-      <div onClick={props.onClickLeft}>
+      <div onClick={handleLeft}>
         <AiOutlineArrowLeft className={cn("w-5 h-5")} />
       </div>
       <div>
@@ -30,7 +34,9 @@ const Navbar = (props: Props) => {
           {props.children}
         </h2>
       </div>
-      <div className={cn("w-5 h-5")}>{props.right}</div>
+      <div>
+        <FiMoreVertical className={cn("w-5 h-5")} />
+      </div>
     </div>
   );
 };
