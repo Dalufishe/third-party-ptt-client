@@ -17,12 +17,12 @@ const WhatsNew = () => {
         css`
           background: linear-gradient(
             to bottom right,
-            ${tailwind_config.theme.colors.secondary},
+            ${tailwind_config.theme.colors.text2},
             ${tailwind_config.theme.colors.primary},
             ${tailwind_config.theme.colors.secondary}
           );
-          background-size: 100% 300%;
-          animation: gradient 7s ease infinite;
+          background-size: 100% 200%;
+          animation: gradient 21s ease infinite;
         `
       )}
     >

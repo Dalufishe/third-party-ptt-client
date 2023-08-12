@@ -15,10 +15,18 @@ const Page = () => {
     >
       <WhatsNew />
       <MoreBox title="選項">
-        <MoreItem icon={<BiSolidHappyAlt />}>關於</MoreItem>
-        <MoreItem icon={<BiCodeAlt />}>開發人員</MoreItem>
-        <MoreItem icon={<AiFillBug />}>回報問題</MoreItem>
-        <MoreItem icon={<AiFillSetting />}>設置</MoreItem>
+        <MoreItem icon={<BiSolidHappyAlt />} href="/more/about">
+          關於
+        </MoreItem>
+        <MoreItem icon={<BiCodeAlt />} href="/more/developers">
+          開發人員
+        </MoreItem>
+        <MoreItem icon={<AiFillBug />} href="/more/issue">
+          回報問題
+        </MoreItem>
+        <MoreItem icon={<AiFillSetting />} href="/more/setting">
+          設置
+        </MoreItem>
       </MoreBox>
     </div>
   );
