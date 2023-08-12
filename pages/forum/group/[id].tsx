@@ -54,7 +54,7 @@ const Page: NextPage<Props> = (props: Props) => {
         </TabsList>
         {forumsType.map((forumType) => {
           if (forumType.name === "分類看板") {
-            return !props.groups.length ? (
+            return !props.groups?.length ? (
               <Loading />
             ) : (
               <PTR key={forumType.name}>
