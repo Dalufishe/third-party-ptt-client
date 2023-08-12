@@ -4,6 +4,8 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import { FiMoreVertical } from "react-icons/fi";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
+import { Post } from "../../../core/PTT";
+import Link from "next/link";
 
 const DropdownMenu = dynamic(
   () =>
@@ -34,13 +36,36 @@ const DropdownMenuTrigger = dynamic(
 
 type Props = {
   children: ReactNode;
+  post: Post;
 };
 
 const Navbar = (props: Props) => {
   const router = useRouter();
+
+  const post = props.post;
+
   const handleLeft = useCallback(() => {
     router.back();
   }, []);
+
+  const handleCopyLink = useCallback(() => {
+    const board = navigator.clipboard;
+    board
+      .writeText(window.location.href)
+      .then(() => {})
+      .catch(() => {
+        alert("複製失敗");
+      });
+  }, []);
+
+  const handleShare = useCallback(() => {
+    if (navigator.share) {
+      navigator.share({ url: window.location.href });
+    } else {
+      alert("您的瀏覽器不支援分享模式");
+    }
+  }, []);
+
   return (
     <div
       className={cn(
@@ -69,9 +94,15 @@ const Navbar = (props: Props) => {
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="dark:bg-secondary rounded-t-sm">
-          <DropdownMenuItem className="text-base">原版網址</DropdownMenuItem>
-          <DropdownMenuItem className="text-base">複製連結</DropdownMenuItem>
-          <DropdownMenuItem className="text-base">分享</DropdownMenuItem>
+          <DropdownMenuItem className="text-base">
+            <Link href={post.originUrl} target="_blank">原版網址</Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className="text-base" onClick={handleCopyLink}>
+            複製連結
+          </DropdownMenuItem>
+          <DropdownMenuItem className="text-base" onClick={handleShare}>
+            分享
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

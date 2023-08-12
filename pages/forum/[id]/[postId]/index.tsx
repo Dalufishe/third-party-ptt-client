@@ -152,7 +152,7 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
         />
       </Head>
       {/* replaced Navbar */}
-      <Navbar>
+      <Navbar post={props.post}>
         <span
           onClick={() => {
             pageEl?.scrollTo({ top: 0, behavior: "smooth" });

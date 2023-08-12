@@ -41,6 +41,7 @@ export type Board = {
 export type Post = {
   page: string;
   need18up: boolean;
+  originUrl: string;
   title: string;
   author: string;
   time: number;
@@ -291,6 +292,7 @@ class PTT {
     const post: Post = {
       page,
       need18up: false,
+      originUrl: url,
       title: "",
       author: "",
       time: 0,
