@@ -3,6 +3,34 @@ import { cn } from "../../@/lib/utils";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import { FiMoreVertical } from "react-icons/fi";
 import { useRouter } from "next/router";
+import dynamic from "next/dynamic";
+
+const DropdownMenu = dynamic(
+  () =>
+    import("../../@/components/ui/dropdown-menu").then((m) => m.DropdownMenu),
+  { ssr: false }
+);
+const DropdownMenuContent = dynamic(
+  () =>
+    import("../../@/components/ui/dropdown-menu").then(
+      (m) => m.DropdownMenuContent
+    ),
+  { ssr: false }
+);
+const DropdownMenuItem = dynamic(
+  () =>
+    import("../../@/components/ui/dropdown-menu").then(
+      (m) => m.DropdownMenuItem
+    ),
+  { ssr: false }
+);
+const DropdownMenuTrigger = dynamic(
+  () =>
+    import("../../@/components/ui/dropdown-menu").then(
+      (m) => m.DropdownMenuTrigger
+    ),
+  { ssr: false }
+);
 
 type Props = {
   children: ReactNode;
@@ -34,9 +62,18 @@ const Navbar = (props: Props) => {
           {props.children}
         </h2>
       </div>
-      <div>
-        <FiMoreVertical className={cn("w-5 h-5")} />
-      </div>
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <div>
+            <FiMoreVertical className={cn("w-5 h-5")} />
+          </div>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="dark:bg-secondary rounded-t-sm">
+          <DropdownMenuItem className="text-base">原版網址</DropdownMenuItem>
+          <DropdownMenuItem className="text-base">複製連結</DropdownMenuItem>
+          <DropdownMenuItem className="text-base">分享</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </div>
   );
 };
