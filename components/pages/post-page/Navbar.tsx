@@ -1,3 +1,4 @@
+// static import
 import React, { ReactNode, useCallback } from "react";
 import { cn } from "../../@/lib/utils";
 import { AiOutlineArrowLeft } from "react-icons/ai";
@@ -7,6 +8,7 @@ import dynamic from "next/dynamic";
 import { Post } from "../../../core/PTT";
 import Link from "next/link";
 
+// dynamic import
 const DropdownMenu = dynamic(
   () =>
     import("../../@/components/ui/dropdown-menu").then((m) => m.DropdownMenu),
