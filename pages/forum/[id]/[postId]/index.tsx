@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetStaticPaths, GetStaticProps } from "next";
+import { GetStaticPaths, GetStaticProps } from "next";
 import PTT, { Post } from "../../../../core/PTT";
 import { cn } from "../../../../components/@/lib/utils";
 import {
@@ -10,14 +10,13 @@ import {
 } from "../../../../components/@/components/ui/card";
 import { NextPageWithLayout } from "../../../../components/layout/NextPageWithLayout";
 import DefaultLayout from "../../../../components/layout/DefaultLayout";
-import { useRouter } from "next/router";
 import Need18Up from "../../../../components/layout/Need18Up/Need18Up";
 import use18 from "../../../../hooks/use18";
 import Head from "next/head";
 import Navbar from "../../../../components/pages/post-page/Navbar";
 import Image from "next/image";
 import IsBottom from "../../../../components/layout/IsBottom/IsBottom";
-import getSiteURL from "../../../../utils/getSiteURL";
+
 import { wrapper } from "../../../../redux/store";
 import PTR from "../../../../components/global/PTR/PTR";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -46,8 +45,6 @@ type Props = {
 };
 
 const Page: NextPageWithLayout<Props> = (props: Props) => {
-  const router = useRouter();
-
   // 18
   const [need18, handleIs18, handleIsNot18] = use18(props.post?.need18up);
 
@@ -152,11 +149,6 @@ const Page: NextPageWithLayout<Props> = (props: Props) => {
           property="og:description"
           content={props.post?.article.slice(0, 100)}
           key="description"
-        />
-        <meta
-          property="og:url"
-          content={`${getSiteURL()}/forum/${props.post?.page}`}
-          key="url"
         />
       </Head>
       {/* replaced Navbar */}
@@ -263,14 +255,37 @@ Page.getLayout = function getLayout(page) {
   return <DefaultLayout noNavbar>{page}</DefaultLayout>;
 };
 
-export const getServerSideProps: GetServerSideProps =
-  wrapper.getServerSideProps(() => async (ctx) => {
+export const getStaticPaths: GetStaticPaths = async () => {
+  const hotBoards = await PTT.getHotBoards();
+  const paths: string[] = [];
+  await Promise.all(
+    hotBoards.map(async (b) => {
+      let path = "";
+      const board = await PTT.getBoard(b.boardName);
+      board.data.map((boardItem) => {
+        if (boardItem.href) {
+          path = "/forum/" + boardItem.href;
+          paths.push(path);
+        }
+      });
+    })
+  );
+  return {
+    paths,
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = wrapper.getStaticProps(
+  () => async (ctx) => {
     const params = ctx.params;
     const page = params?.id + "/" + params?.postId;
     const post = await PTT.getPost(page);
     return {
       props: { post },
+      revalidate: 10,
     };
-  });
+  }
+);
 
 export default Page;
