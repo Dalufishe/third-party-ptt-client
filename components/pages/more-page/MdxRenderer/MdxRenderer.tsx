@@ -12,6 +12,8 @@ const MdxRenderer = (props: Props) => {
   return (
     <div
       className={cn(
+        "h-[calc(100vh-96px)]",
+        "overflow-auto",
         "p-4",
         "text-text3",
         css`
